@@ -1,0 +1,14 @@
+{
+	"body": "{\"shareWith\":\"cult@https://nc30b.local\",\"shareType\":\"user\",\"name\":\"3ad85aea\",\"resourceType\":\"file\",\"description\":\"\",\"providerId\":2,\"owner\":\"cult@nc30.local\",\"ownerDisplayName\":\"cult\",\"sharedBy\":\"cult@nc30.local\",\"sharedByDisplayName\":\"cult\",\"protocol\":{\"name\":\"webdav\",\"options\":{\"sharedSecret\":\"4qgArJePTcJvtC6\",\"permissions\":\"{http://open-cloud-mesh.org/ns}share-permissions\"}}}",
+	"headers": {
+		"content-type": "application\\/json",
+		"content-length": 385,
+		"date": "Mon, 08 Jul 2024 14:16:20 GMT",
+		"digest": "SHA-256=U7gNVUQiixe5BRbp4Tg0xCZMTcSWXXUZI2\\/xtHM40S0=",
+		"host": "nc30b.local",
+		"Signature": "keyId=\"https:\\/\\/nc30.local\\/ocm\\/shares#signature\",algorithm=\"ras-sha256\",headers=\"content-length date digest host\",signature=\"DzN12OTdwRxQoYCS1rsAQFimKn14hGgnyBFvAp2XOHCjBWuqoZ3xJyKIrYwq0PzHLkwHLFs6VAB8YZUBLVFT9HLtCUi4q9sEW4Yo\\/XX+PVrt5m2uWDFZZhRD3ISdOG4Qjj5tRaKfF6VbtIzxYsPNY28MQ\\/FVw2B2b1Hnxln8XWI5lTi2CIq4u7qqCw4fXg5m8+JozpCfGTGFGCd+tz4uJQco54SgllVvPGF0lFe\\/9DYU9jeEKKfcJhc7y5yW0TNQuo74lco8z7nWMRKrKw7srkksRf8grjMpVSU2osrYXOA7j1nue5foPt1\\/\\/EveEkje30a8Go0VmxjQooRo6HHabg==\""
+	},
+	"verify": false,
+	"timeout": 10,
+	"connect_timeout": 10
+}
