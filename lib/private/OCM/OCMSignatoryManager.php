@@ -13,7 +13,9 @@ use OCP\IURLGenerator;
 use OCP\OCM\Exceptions\OCMProviderException;
 use OCP\Security\PublicPrivateKeyPairs\Exceptions\KeyPairNotFoundException;
 use OCP\Security\PublicPrivateKeyPairs\IKeyPairManager;
+use OCP\Security\Signature\Exceptions\SignatureIdentityNotFoundException;
 use OCP\Security\Signature\ISignatoryManager;
+use OCP\Security\Signature\ISignatureManager;
 use OCP\Security\Signature\Model\IIncomingSignedRequest;
 use OCP\Security\Signature\Model\ISignatory;
 use OCP\Security\Signature\Model\SignatoryType;
@@ -30,6 +32,7 @@ class OCMSignatoryManager implements ISignatoryManager {
 	public const PROVIDER_ID = 'ocm';
 
 	public function __construct(
+		private readonly ISignatureManager $signatureManager,
 		private readonly IURLGenerator $urlGenerator,
 		private readonly IKeyPairManager $keyPairManager,
 		private readonly OCMDiscoveryService $ocmDiscoveryService,
@@ -63,8 +66,23 @@ class OCMSignatoryManager implements ISignatoryManager {
 	 * @return ISignatory
 	 */
 	public function getLocalSignatory(): ISignatory {
-		$url = $this->urlGenerator->linkToRouteAbsolute('cloud_federation_api.requesthandlercontroller.addShare');
-		$keyId = $url . '#signature';
+		try {
+			$keyId = $this->signatureManager->generateKeyId('/ocm#signature');
+		} catch (SignatureIdentityNotFoundException) {
+			$url = $this->urlGenerator->linkToRouteAbsolute('cloud_federation_api.requesthandlercontroller.addShare');
+
+			$hostname = parse_url($url,PHP_URL_HOST);
+			$path = parse_url($url,PHP_URL_PATH);
+
+			// tries to create a keyId like 'https://hostname/subfolder/ocm#signature
+			$pos = strpos($path, '/ocm/shares');
+			if ($pos) {
+				$path = substr($path, 0, $pos) . '/ocm';
+			} else {
+				$path = '/ocm#signature';
+			}
+			$keyId = 'https://' . $hostname . $path . '#signature';
+		}
 
 		try {
 			$keyPair = $this->keyPairManager->getKeyPair('core', 'ocm');

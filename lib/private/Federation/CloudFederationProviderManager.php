@@ -123,7 +123,6 @@ class CloudFederationProviderManager implements ICloudFederationProviderManager 
 				],
 			'post', $uri);
 
-			\OC::$server->getLogger()->log(3,' ### ' . json_encode($signedPayload));
 			$response = $client->post($uri, $signedPayload);
 			if ($response->getStatusCode() === Http::STATUS_CREATED) {
 				$result = json_decode($response->getBody(), true);

@@ -11,6 +11,7 @@ namespace OCP\Security\Signature;
 use OCP\Security\Signature\Exceptions\IncomingRequestException;
 use OCP\Security\Signature\Exceptions\SignatoryNotFoundException;
 use OCP\Security\Signature\Exceptions\SignatureException;
+use OCP\Security\Signature\Exceptions\SignatureIdentityNotFoundException;
 use OCP\Security\Signature\Exceptions\SignatureNotFoundException;
 use OCP\Security\Signature\Model\IIncomingSignedRequest;
 use OCP\Security\Signature\Model\IOutgoingSignedRequest;
@@ -72,8 +73,8 @@ interface ISignatureManager {
 	 * @param string $method needed in the signature
 	 * @param string $uri needed in the signature
 	 *
-	 * @since 30.0.0
 	 * @return IOutgoingSignedRequest
+	 * @since 30.0.0
 	 */
 	public function getOutgoingSignedRequest(ISignatoryManager $signatoryManager, string $content, string $method, string $uri): IOutgoingSignedRequest;
 
@@ -86,8 +87,8 @@ interface ISignatureManager {
 	 * @param string $method needed in the signature
 	 * @param string $uri needed in the signature
 	 *
-	 * @since 30.0.0
 	 * @return array new payload to be sent, including original payload and signature elements in headers
+	 * @since 30.0.0
 	 */
 	public function signOutgoingRequestIClientPayload(ISignatoryManager $signatoryManager, array $payload, string $method, string $uri): array;
 
@@ -97,9 +98,20 @@ interface ISignatureManager {
 	 * @param string $host remote host
 	 * @param string $account linked account, should be used when multiple signature can exist for the same host
 	 *
-	 * @since 30.0.0
-	 * @throws SignatoryNotFoundException if entry does not exist in local database
 	 * @return ISignatory
+	 * @throws SignatoryNotFoundException if entry does not exist in local database
+	 * @since 30.0.0
 	 */
 	public function searchSignatory(string $host, string $account = ''): ISignatory;
+
+	/**
+	 * returns a fully formatted keyId, based on a fix hostname and path
+	 *
+	 * @param string $path
+	 *
+	 * @return string
+	 * @throws SignatureIdentityNotFoundException if hostname is not set
+	 * @since 30.0.0
+	 */
+	public function generateKeyId(string $path): string;
 }

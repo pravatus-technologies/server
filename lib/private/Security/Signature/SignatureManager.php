@@ -12,6 +12,7 @@ use OC\Security\Signature\Model\IncomingSignedRequest;
 use OC\Security\Signature\Model\OutgoingSignedRequest;
 use OC\Security\Signature\Model\Signatory;
 use OCP\DB\Exception as DBException;
+use OCP\IAppConfig;
 use OCP\IDBConnection;
 use OCP\IRequest;
 use OCP\Security\Signature\Exceptions\IncomingRequestException;
@@ -21,6 +22,7 @@ use OCP\Security\Signature\Exceptions\SignatoryConflictException;
 use OCP\Security\Signature\Exceptions\SignatoryException;
 use OCP\Security\Signature\Exceptions\SignatoryNotFoundException;
 use OCP\Security\Signature\Exceptions\SignatureException;
+use OCP\Security\Signature\Exceptions\SignatureIdentityNotFoundException;
 use OCP\Security\Signature\Exceptions\SignatureNotFoundException;
 use OCP\Security\Signature\ISignatoryManager;
 use OCP\Security\Signature\ISignatureManager;
@@ -40,10 +42,12 @@ class SignatureManager implements ISignatureManager {
 	private const SIGNATORY_TTL = 86400 * 3;
 	private const TABLE_SIGNATORIES = 'sec_signatory';
 	private const BODY_MAXSIZE = 50000; // max size of the payload of the request
+	const APPCONFIG_IDENTITY = 'security.signature.identity';
 
 	public function __construct(
 		private readonly IRequest $request,
 		private readonly IDBConnection $connection,
+		private readonly IAppConfig $appConfig,
 		private readonly LoggerInterface $logger,
 	) {
 	}
@@ -65,8 +69,6 @@ class SignatureManager implements ISignatureManager {
 		?string $body = null
 	): IIncomingSignedRequest {
 		$body = $body ?? file_get_contents('php://input');
-		$this->logger->debug('[<<] incoming signed request', ['body length' => strlen($body)]);
-
 		if (strlen($body) > self::BODY_MAXSIZE) {
 			throw new IncomingRequestException('content of request is too big');
 		}
@@ -113,13 +115,13 @@ class SignatureManager implements ISignatureManager {
 		string $uri
 	): IOutgoingSignedRequest {
 		$signedRequest = new OutgoingSignedRequest($content);
+		$options = $signatoryManager->getOptions();
 
 		$parsed = parse_url($uri);
 		$signedRequest->setHost($parsed['host'])
 					  ->setAlgorithm($options['algorithm'] ?? 'sha256')
 					  ->setSignatory($signatoryManager->getLocalSignatory());
 
-		$options = $signatoryManager->getOptions();
 		$this->setOutgoingSignatureHeader(
 			$signedRequest,
 			strtolower($method),
@@ -185,6 +187,26 @@ class SignatureManager implements ISignatureManager {
 		return $signature->importFromDatabase($row);
 	}
 
+
+	/**
+	 * @inheritDoc
+	 *
+	 * hostname is set using app config 'core/security.signature.identity'
+	 *
+	 * @param string $path
+	 *
+	 * @return string
+	 * @throws SignatureIdentityNotFoundException is hostname is not set in app config
+	 * @since 30.0.0
+	 */
+	public function generateKeyId(string $path): string {
+		if (!$this->appConfig->hasKey('core', self::APPCONFIG_IDENTITY)) {
+			throw new SignatureIdentityNotFoundException(self::APPCONFIG_IDENTITY . ' not set');
+		}
+
+		$identity = trim($this->appConfig->getValueString('core', self::APPCONFIG_IDENTITY), '/');
+		return 'https://' . $identity . '/' . ltrim($path, '/');
+	}
 
 	/**
 	 * using the requested 'date' entry from header to confirm request is not older than ttl
@@ -271,9 +293,9 @@ class SignatureManager implements ISignatureManager {
 			}
 
 			[$k, $v] = explode('=', $entry, 2);
-			preg_match('/"([^"]+)"/', $v, $varr);
-			if ($varr[0] !== null) {
-				$v = trim($varr[0], '"');
+			preg_match('/"([^"]+)"/', $v, $var);
+			if ($var[0] !== '') {
+				$v = trim($var[0], '"');
 			}
 			$sign[$k] = $v;
 		}
@@ -678,7 +700,7 @@ class SignatureManager implements ISignatureManager {
 		   ->set('signatory', $qb->createNamedParameter($signatory->getPublicKey()))
 		   ->set('last_updated', $qb->createNamedParameter(time()));
 
-		$qb->where($qb->expr()->eq('`key_id_sum`', $qb->createNamedParameter($this->hashKeyId($signatory->getKeyId()))));
+		$qb->where($qb->expr()->eq('key_id_sum', $qb->createNamedParameter($this->hashKeyId($signatory->getKeyId()))));
 		$qb->executeStatement();
 	}
 

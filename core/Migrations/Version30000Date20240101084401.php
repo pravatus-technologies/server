@@ -59,7 +59,7 @@ class Version30000Date20240101084401 extends SimpleMigrationStep {
 			// account will be used only to stored multiple keys for the same provider_id/host
 			$table->addColumn('host', Types::STRING, [
 				'notnull' => true,
-				'length' => 127
+				'length' => 512
 			]);
 			$table->addColumn('provider_id', Types::STRING, [
 				'notnull' => true,

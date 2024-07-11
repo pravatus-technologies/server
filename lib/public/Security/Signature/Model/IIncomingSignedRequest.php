@@ -73,6 +73,15 @@ interface IIncomingSignedRequest extends ISignedRequest {
 	public function getOrigin(): string;
 
 	/**
+	 * returns the keyId extracted from the signature headers.
+	 * keyId is a mandatory entry in the headers of a signed request.
+	 *
+	 * @return string
+	 * @since 30.0.0
+	 */
+	public function getKeyId(): string;
+
+	/**
 	 * store a clear and estimated version of the signature, based on payload and headers.
 	 * This clear version will be compared with the real signature using
 	 * the public key of remote instance at the origin of the request.

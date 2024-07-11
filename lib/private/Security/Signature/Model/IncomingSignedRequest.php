@@ -29,14 +29,16 @@ class IncomingSignedRequest extends SignedRequest
 	private ?IRequest $request = null;
 	private int $time = 0;
 	private string $origin = '';
-	private string $host = '';
 	private string $estimatedSignature = '';
 
 	/**
+	 * @inheritDoc
+	 *
 	 * @param ISignatory $signatory
 	 *
 	 * @return $this
 	 * @throws SignatoryException
+	 * @since 30.0.0
 	 */
 	public function setSignatory(ISignatory $signatory): self {
 		if (parse_url($signatory->getKeyId(), PHP_URL_HOST) !== $this->getOrigin()) {
@@ -47,11 +49,25 @@ class IncomingSignedRequest extends SignedRequest
 		return $this;
 	}
 
+	/**
+	 * @inheritDoc
+	 *
+	 * @param IRequest $request
+	 * @return IIncomingSignedRequest
+	 * @since 30.0.0
+	 */
 	public function setRequest(IRequest $request): IIncomingSignedRequest {
 		$this->request = $request;
 		return $this;
 	}
 
+	/**
+	 * @inheritDoc
+	 *
+	 * @return IRequest
+	 * @throws IncomingRequestNotFoundException
+	 * @since 30.0.0
+	 */
 	public function getRequest(): IRequest {
 		if ($this->request === null) {
 			throw new IncomingRequestNotFoundException();
@@ -59,29 +75,79 @@ class IncomingSignedRequest extends SignedRequest
 		return $this->request;
 	}
 
+	/**
+	 * @inheritDoc
+	 *
+	 * @param int $time
+	 * @return IIncomingSignedRequest
+	 * @since 30.0.0
+	 */
 	public function setTime(int $time): IIncomingSignedRequest {
 		$this->time = $time;
 		return $this;
 	}
 
+	/**
+	 * @inheritDoc
+	 *
+	 * @return int
+	 * @since 30.0.0
+	 */
 	public function getTime(): int {
 		return $this->time;
 	}
 
+	/**
+	 * @inheritDoc
+	 *
+	 * @param string $origin
+	 * @return IIncomingSignedRequest
+	 * @since 30.0.0
+	 */
 	public function setOrigin(string $origin): IIncomingSignedRequest {
 		$this->origin = $origin;
 		return $this;
 	}
 
+	/**
+	 * @inheritDoc
+	 *
+	 * @return string
+	 * @since 30.0.0
+	 */
 	public function getOrigin(): string {
 		return $this->origin;
 	}
 
+	/**
+	 * returns the keyId extracted from the signature headers.
+	 * keyId is a mandatory entry in the headers of a signed request.
+	 *
+	 * @return string
+	 * @since 30.0.0
+	 */
+	public function getKeyId(): string {
+		return $this->getSignatureHeader()['keyId'] ?? '';
+	}
+
+	/**
+	 * @inheritDoc
+	 *
+	 * @param string $signature
+	 * @return IIncomingSignedRequest
+	 * @since 30.0.0
+	 */
 	public function setEstimatedSignature(string $signature): IIncomingSignedRequest {
 		$this->estimatedSignature = $signature;
 		return $this;
 	}
 
+	/**
+	 * @inheritDoc
+	 *
+	 * @return string
+	 * @since 30.0.0
+	 */
 	public function getEstimatedSignature(): string {
 		return $this->estimatedSignature;
 	}
@@ -94,6 +160,7 @@ class IncomingSignedRequest extends SignedRequest
 				'time' => $this->getTime(),
 				'incomingRequest' => $this->request ?? false,
 				'origin' => $this->getOrigin(),
+				'keyId' => $this->getKeyId(),
 				'estimatedSignature' => $this->getEstimatedSignature(),
 			]
 		);

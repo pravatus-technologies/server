@@ -20,7 +20,7 @@ use OCP\Security\PublicPrivateKeyPairs\Model\IKeyPair;
 interface IKeyPairManager {
 
 	/**
-	 * generate public/private key pair.
+	 * generate and store public/private key pair.
 	 * throws exception if key pair already exist
 	 *
 	 * @param string $app appId

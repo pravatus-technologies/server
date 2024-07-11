@@ -47,6 +47,8 @@ use Psr\Log\LoggerInterface;
  */
 #[OpenAPI(scope: OpenAPI::SCOPE_FEDERATION)]
 class RequestHandlerController extends Controller {
+	const APPCONFIG_SIGN_ENFORCED = 'enforce_signed_ocm_request';
+
 	public function __construct(
 		string $appName,
 		IRequest $request,
@@ -333,7 +335,7 @@ class RequestHandlerController extends Controller {
 			// remote does not support signed request.
 			// currently we still accept unsigned request until lazy appconfig
 			// core.enforce_signed_ocm_request is set to true (default: false)
-			if ($this->appConfig->getValueBool('enforce_signed_ocm_request', false, lazy: true)) {
+			if ($this->appConfig->getValueBool('core', self::APPCONFIG_SIGN_ENFORCED, lazy: true)) {
 				$this->logger->notice('ignored unsigned request', ['exception' => $e]);
 				throw new IncomingRequestException('Unsigned request');
 			}

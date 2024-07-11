@@ -27,7 +27,7 @@ class SignedRequest implements ISignedRequest, JsonSerializable {
 		private readonly string $body
 	) {
 		// digest is created on the fly using $body
-		$this->digest = 'SHA-256=' . base64_encode(hash("sha256", utf8_encode($body), true));
+		$this->digest = 'SHA-256=' . base64_encode(hash('sha256', utf8_encode($body), true));
 	}
 
 	/**
@@ -70,17 +70,6 @@ class SignedRequest implements ISignedRequest, JsonSerializable {
 	 */
 	public function getSignatureHeader(): array {
 		return $this->signatureHeader;
-	}
-
-	/**
-	 * returns the keyId extracted from the signature headers.
-	 * keyId is a mandatory entry in the headers of a signed request.
-	 *
-	 * @return string
-	 * @since 30.0.0
-	 */
-	public function getKeyId(): string {
-		return $this->getSignatureHeader()['keyId'] ?? '';
 	}
 
 	/**
@@ -142,7 +131,6 @@ class SignedRequest implements ISignedRequest, JsonSerializable {
 			'body' => $this->getBody(),
 			'signatureHeader' => $this->getSignatureHeader(),
 			'signedSignature' => $this->getSignedSignature(),
-			'keyId' => $this->getKeyId(),
 			'signatory' => $this->signatory ?? false,
 		];
 	}

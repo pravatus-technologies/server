@@ -11,5 +11,5 @@ namespace OCP\Security\Signature\Exceptions;
 /**
  * @since 30.0.0
  */
-class IncomingRequestException extends SignatureException {
+class SignatureIdentityNotFoundException extends SignatureException {
 }
