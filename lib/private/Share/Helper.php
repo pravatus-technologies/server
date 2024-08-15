@@ -129,7 +129,7 @@ class Helper extends \OC\Share\Constants {
 
 	public static function getTokenLength(): int {
 		$config = \OC::$server->getConfig();
-		$tokenLength = (int)$config->getAppValue('core', 'shareapi_token_length', self::DEFAULT_TOKEN_LENGTH);
+		$tokenLength = (int)$config->getAppValue('core', 'shareapi_token_length', (string)self::DEFAULT_TOKEN_LENGTH);
 
 		// Token length should be within the defined min and max limits
 		if ($tokenLength < self::MIN_TOKEN_LENGTH) {
