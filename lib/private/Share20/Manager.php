@@ -665,13 +665,35 @@ class Manager implements IManager {
 				$this->linkCreateChecks($share);
 				$this->setLinkParent($share);
 
-				// For now ignore a set token.
-				$share->setToken(
-					$this->secureRandom->generate(
-						\OC\Share\Constants::TOKEN_LENGTH,
-						\OCP\Security\ISecureRandom::CHAR_HUMAN_READABLE
-					)
-				);
+				do {
+					$tokenExists = false;
+					$attempts = 0;
+
+					do {
+						// Generate a new token
+						$token = $this->secureRandom->generate(
+							\OC\Share\Constants::TOKEN_LENGTH,
+							\OCP\Security\ISecureRandom::CHAR_HUMAN_READABLE
+						);
+
+						try {
+							// Try to fetch a share with the generated token
+							$this->getShareByToken($token);
+							$tokenExists = true; // Token exists, generate a new one
+							$attempts++; // Increment the attempt counter
+						} catch (\OCP\Share\Exceptions\ShareNotFound $e) {
+							$tokenExists = false; // Token is unique, we can use it
+						}
+					} while ($tokenExists && $attempts < 3);
+
+					// If we've reached the maximum attempts and the token still exists, increase the token length
+					if ($tokenExists) {
+						throw new \Exception('Unable to generate a unique share token. Maximum token length exceeded.');
+					}
+				} while ($tokenExists);
+
+				// Set the unique token
+				$share->setToken($token);
 
 				// Verify the expiration date
 				$share = $this->validateExpirationDateLink($share);
