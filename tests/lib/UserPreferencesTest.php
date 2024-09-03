@@ -36,12 +36,71 @@ class UserPreferencesTest extends TestCase {
 			'user1' =>
 				[
 					'app1' => [
+						'key1' => ['key1', 'value1'],
+						'fast_string' => ['fast_string', 'value', ValueType::STRING],
+						'lazy_string' => ['lazy_string', 'value', ValueType::STRING, true],
+						'fast_string_sensitive' => ['fast_string_sensitive', 'value', ValueType::STRING, false, true],
+						'lazy_string_sensitive' => ['lazy_string_sensitive', 'value', ValueType::STRING, true, true],
+						'fast_int' => ['fast_int', 11, ValueType::INT],
+						'lazy_int' => ['lazy_int', 12, ValueType::INT, true],
+						'fast_float' => ['fast_float', 3.14, ValueType::FLOAT],
+						'lazy_float' => ['lazy_float', 3.14, ValueType::FLOAT, true],
+						'fast_boolean' => ['fast_boolean', true, ValueType::BOOL],
+						'lazy_boolean' => ['lazy_boolean', true, ValueType::BOOL, true],
+					],
+					'app2' => [
+						'key2' => ['key2', 'value2']
+					],
+					'app3' => [
+						'key3' => ['key3', 'value3']
+					],
+					'only-lazy' => [
+						'key1' => ['key1', 'value1', ValueType::STRING, true],
+						'key2' => ['key2', 'value2', ValueType::STRING, true, true],
+						'key3' => ['key3', 42, ValueType::INT, true],
+						'key4' => ['key4', 12.42, ValueType::FLOAT, true],
+						'key5' => ['key5', true, ValueType::BOOL, true],
+					]
+				],
+			'user2' =>
+				[
+					'app1' => [
 						'key1' => ['key1', 'value1']
 					],
 					'only-lazy' => [
 						'key1' => ['key1', 'value1', ValueType::STRING, true]
 					]
-				]
+				],
+			'user3' =>
+				[
+					'app2' => [
+						'key2' => ['key2', 'value2']
+					],
+					'only-lazy' => [
+						'key3' => ['key3', 'value3', ValueType::STRING, true]
+					]
+				],
+			'user4' =>
+				[
+					'app2' => [
+						'key1' => ['key1', 'value1'],
+						'key2' => ['key2', 'value2'],
+						'key3' => ['key3', 'value3'],
+					],
+					'only-lazy' => [
+						'key1' => ['key1', 'value1', ValueType::INT, true]
+					]
+				],
+			'user5' =>
+				[
+					'app1' => [
+						'key1' => ['key1', 'value1']
+					],
+					'only-lazy' => [
+						'key1' => ['key1', 'value1', ValueType::STRING, true]
+					]
+				],
+
 		];
 
 	protected function setUp(): void {
@@ -169,9 +228,35 @@ class UserPreferencesTest extends TestCase {
 		return $preferences;
 	}
 
+	public function testGetUserIdsEmpty(): void {
+		$preferences = $this->generateUserPreferences();
+		$this->assertEqualsCanonicalizing(array_keys($this->basePreferences), $preferences->getUserIds());
+	}
+
+	public function testGetUserIds(): void {
+		$preferences = $this->generateUserPreferences();
+		$this->assertEqualsCanonicalizing(['user1', 'user2', 'user5'], $preferences->getUserIds('app1'));
+	}
+
+	public function testGetApps(): void {
+		$preferences = $this->generateUserPreferences();
+		$this->assertEqualsCanonicalizing(array_keys($this->basePreferences['user1']), $preferences->getApps('user1'));
+	}
+
 	public function testGetKeys(): void {
 		$preferences = $this->generateUserPreferences(['user1']);
 		$this->assertEqualsCanonicalizing(array_keys($this->basePreferences['user1']['app1']), $preferences->getKeys('user1', 'app1'));
 	}
+
+	public function testHasKeyTrue(): void {
+		$preferences = $this->generateUserPreferences();
+		$this->assertEquals(true, $preferences->hasKey('user1', 'app1', 'key1'));
+	}
+
+	public function testHasKeyFalse(): void {
+		$preferences = $this->generateUserPreferences();
+		$this->assertEquals(false, $preferences->hasKey('user1', 'app1', 'key0'));
+	}
+
 
 }

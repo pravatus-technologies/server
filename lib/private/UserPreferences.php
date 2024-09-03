@@ -82,7 +82,7 @@ class UserPreferences implements IUserPreferences {
 		$qb->select('userid');
 		$qb->groupBy('userid');
 		if ($appId !== '') {
-			$qb->where($qb->expr()->eq('app_id', $qb->createNamedParameter($appId)));
+			$qb->where($qb->expr()->eq('appid', $qb->createNamedParameter($appId)));
 		}
 
 		$result = $qb->executeQuery();
@@ -123,7 +123,7 @@ class UserPreferences implements IUserPreferences {
 		$this->assertParams($userId, $app);
 		$this->loadPreferencesAll($userId);
 		// array_merge() will remove numeric keys (here preference keys), so addition arrays instead
-		$keys = array_map('strval', array_keys($this->fastCache[$userId][$app] ?? []) + (array_keys($this->lazyCache[$userId][$app] ?? [])));
+		$keys = array_map('strval', array_keys(($this->fastCache[$userId][$app] ?? []) + ($this->lazyCache[$userId][$app] ?? [])));
 		sort($keys);
 
 		return array_values(array_unique($keys));
