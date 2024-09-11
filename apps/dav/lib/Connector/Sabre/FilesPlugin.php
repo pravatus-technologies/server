@@ -187,6 +187,7 @@ class FilesPlugin extends ServerPlugin {
 	 * @throws InvalidPath If the target name is invalid
 	 */
 	public function checkMove(string $source, string $target): void {
+		sleep(10);
 		$sourceNode = $this->tree->getNodeForPath($source);
 		if (!$sourceNode instanceof Node) {
 			return;

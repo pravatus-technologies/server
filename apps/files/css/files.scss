@@ -6,6 +6,13 @@
 @use 'variables';
 @import 'functions';
 
+.toast-loading-icon {
+	// Reduce start margin (it was made for text but this is an icon)
+	margin-inline-start: -8px;
+	// 16px icon + 5px on both sides
+	min-width: 26px;
+}
+
 /* FILE MENU */
 .actions {
 	// (50px - 44px) / 2
