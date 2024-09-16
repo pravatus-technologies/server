@@ -2,11 +2,8 @@
  * SPDX-FileCopyrightText: 2023 Nextcloud GmbH and Nextcloud contributors
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
-import { FileAction, Node, FileType, View, DefaultType } from '@nextcloud/files'
+import { FileAction, Node, FileType, DefaultType } from '@nextcloud/files'
 import { t } from '@nextcloud/l10n'
-import { generateUrl } from '@nextcloud/router'
-import { getSharingToken, isPublicShare } from '@nextcloud/sharing/public'
-import { basename } from 'path'
 import { isDownloadable } from '../utils/permissions'
 
 import ArrowDownSvg from '@mdi/svg/svg/arrow-down.svg?raw'
@@ -18,25 +15,48 @@ const triggerDownload = function(url: string) {
 	hiddenElement.click()
 }
 
-const downloadNodes = function(dir: string, nodes: Node[]) {
-	const secret = Math.random().toString(36).substring(2)
-	let url: string
-	if (isPublicShare()) {
-		url = generateUrl('/s/{token}/download/{filename}?path={dir}&files={files}&downloadStartSecret={secret}', {
-			dir,
-			secret,
-			files: JSON.stringify(nodes.map(node => node.basename)),
-			token: getSharingToken(),
-			filename: `${basename(dir)}.zip}`,
-		})
-	} else {
-		url = generateUrl('/apps/files/ajax/download.php?dir={dir}&files={files}&downloadStartSecret={secret}', {
-			dir,
-			secret,
-			files: JSON.stringify(nodes.map(node => node.basename)),
-		})
+/**
+ * Find the longest common path prefix of both input paths
+ */
+function longestCommonPath(first: string, second: string): string {
+	const firstSegments = first.split('/').filter(Boolean)
+	const secondSegments = second.split('/').filter(Boolean)
+	let base = ''
+	for (const [index, segment] of firstSegments.entries()) {
+		if (index >= second.length) {
+			break
+		}
+		if (segment !== secondSegments[index]) {
+			break
+		}
+		const sep = base === '' ? '' : '/'
+		base = `${base}${sep}${segment}`
 	}
-	triggerDownload(url)
+	return base
+}
+
+const downloadNodes = function(nodes: Node[]) {
+	if (nodes.length === 1) {
+		if (nodes[0].type === FileType.File) {
+			return triggerDownload(nodes[0].encodedSource)
+		} else {
+			const url = new URL(nodes[0].encodedSource)
+			url.searchParams.append('accept', 'zip')
+			return triggerDownload(url.href)
+		}
+	}
+
+	const url = new URL(nodes[0].source)
+	let base = url.pathname
+	for (const node of nodes.slice(1)) {
+		base = longestCommonPath(base, (new URL(node.source).pathname))
+	}
+	url.pathname = base
+
+	const filenames = nodes.map((node) => node.source.slice(url.href.length + 1))
+	url.searchParams.append('accept', 'zip')
+	url.searchParams.append('files', filenames.join(','))
+	triggerDownload(url.href)
 }
 
 export const action = new FileAction({
@@ -62,23 +82,13 @@ export const action = new FileAction({
 		return nodes.every(isDownloadable)
 	},
 
-	async exec(node: Node, view: View, dir: string) {
-		if (node.type === FileType.Folder) {
-			downloadNodes(dir, [node])
-			return null
-		}
-
-		triggerDownload(node.encodedSource)
+	async exec(node: Node) {
+		downloadNodes([node])
 		return null
 	},
 
-	async execBatch(nodes: Node[], view: View, dir: string) {
-		if (nodes.length === 1) {
-			this.exec(nodes[0], view, dir)
-			return [null]
-		}
-
-		downloadNodes(dir, nodes)
+	async execBatch(nodes: Node[]) {
+		downloadNodes(nodes)
 		return new Array(nodes.length).fill(null)
 	},
 
