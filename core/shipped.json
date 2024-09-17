@@ -1,5 +1,6 @@
 {
   "shippedApps": [
+    "app_api",
     "activity",
     "admin_audit",
     "bruteforcesettings",
@@ -53,6 +54,7 @@
     "workflowengine"
   ],
   "defaultEnabled": [
+    "app_api",
     "activity",
     "bruteforcesettings",
     "circles",
