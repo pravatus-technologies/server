@@ -33,21 +33,6 @@ new LDAPSettingsAppVue({
 
 /***/ }),
 
-/***/ "./apps/user_ldap/src/models/index.ts":
-/*!********************************************!*\
-  !*** ./apps/user_ldap/src/models/index.ts ***!
-  \********************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-__webpack_require__.r(__webpack_exports__);
-/**
- * SPDX-FileCopyrightText: 2023 Nextcloud GmbH and Nextcloud contributors
- * SPDX-License-Identifier: AGPL-3.0-or-later
- */
-
-
-/***/ }),
-
 /***/ "./apps/user_ldap/src/services/ldapConfigService.ts":
 /*!**********************************************************!*\
   !*** ./apps/user_ldap/src/services/ldapConfigService.ts ***!
@@ -233,36 +218,39 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
-/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.runtime.esm.js");
+/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.runtime.esm.js");
 /* harmony import */ var _nextcloud_l10n__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @nextcloud/l10n */ "./node_modules/@nextcloud/l10n/dist/index.mjs");
-/* harmony import */ var _services_ldapConfigService__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../services/ldapConfigService */ "./apps/user_ldap/src/services/ldapConfigService.ts");
+/* harmony import */ var _nextcloud_vue__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @nextcloud/vue */ "./node_modules/@nextcloud/vue/dist/index.mjs");
+/* harmony import */ var _store_config__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../store/config */ "./apps/user_ldap/src/store/config.ts");
 
 
 
 
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (/*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_2__.defineComponent)({
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (/*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_3__.defineComponent)({
   __name: 'AdvancedTab',
   props: {
-    ldapConfig: {
-      type: Object,
+    ldapConfigId: {
+      type: String,
       required: true
     }
   },
   setup(__props) {
     const {
-      ldapConfig
+      ldapConfigId
     } = __props;
-    const ldap_expert_username_attr_default = '';
-    const ldap_expert_uuid_user_attr_default = '';
-    const ldap_expert_uuid_group_attr_default = '';
-    const settingControls = '';
+    const ldapConfigStore = (0,_store_config__WEBPACK_IMPORTED_MODULE_2__.useLDAPConfigStore)();
+    const ldapConfig = (0,vue__WEBPACK_IMPORTED_MODULE_3__.computed)(() => ldapConfigStore.ldapConfigs[ldapConfigId]);
+    const instanceName = 'TODO';
     return {
       __sfc: true,
-      ldap_expert_username_attr_default,
-      ldap_expert_uuid_user_attr_default,
-      ldap_expert_uuid_group_attr_default,
-      settingControls,
-      t: _nextcloud_l10n__WEBPACK_IMPORTED_MODULE_0__.t
+      ldapConfigStore,
+      ldapConfig,
+      instanceName,
+      t: _nextcloud_l10n__WEBPACK_IMPORTED_MODULE_0__.t,
+      NcTextField: _nextcloud_vue__WEBPACK_IMPORTED_MODULE_1__.NcTextField,
+      NcTextArea: _nextcloud_vue__WEBPACK_IMPORTED_MODULE_1__.NcTextArea,
+      NcCheckboxRadioSwitch: _nextcloud_vue__WEBPACK_IMPORTED_MODULE_1__.NcCheckboxRadioSwitch
     };
   }
 }));
@@ -281,7 +269,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.runtime.esm.js");
 /* harmony import */ var _nextcloud_l10n__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @nextcloud/l10n */ "./node_modules/@nextcloud/l10n/dist/index.mjs");
-/* harmony import */ var _models__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../models */ "./apps/user_ldap/src/models/index.ts");
+/* harmony import */ var _nextcloud_vue__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @nextcloud/vue */ "./node_modules/@nextcloud/vue/dist/index.mjs");
 /* harmony import */ var _store_config__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../store/config */ "./apps/user_ldap/src/store/config.ts");
 
 
@@ -291,28 +279,24 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (/*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_3__.defineComponent)({
   __name: 'ExpertTab',
   props: {
-    ldapConfig: {
-      type: Object,
+    ldapConfigId: {
+      type: String,
       required: true
     }
   },
   setup(__props) {
     const {
-      ldapConfig
+      ldapConfigId
     } = __props;
     const ldapConfigStore = (0,_store_config__WEBPACK_IMPORTED_MODULE_2__.useLDAPConfigStore)();
-    const settingControls = '';
-    const theme = {
-      getName() {
-        return 'TODO';
-      }
-    };
+    const ldapConfig = (0,vue__WEBPACK_IMPORTED_MODULE_3__.computed)(() => ldapConfigStore.ldapConfigs[ldapConfigId]);
     return {
       __sfc: true,
       ldapConfigStore,
-      settingControls,
-      theme,
-      t: _nextcloud_l10n__WEBPACK_IMPORTED_MODULE_0__.t
+      ldapConfig,
+      t: _nextcloud_l10n__WEBPACK_IMPORTED_MODULE_0__.t,
+      NcTextField: _nextcloud_vue__WEBPACK_IMPORTED_MODULE_1__.NcTextField,
+      NcButton: _nextcloud_vue__WEBPACK_IMPORTED_MODULE_1__.NcButton
     };
   }
 }));
@@ -671,8 +655,8 @@ __webpack_require__.r(__webpack_exports__);
       groups: (0,_nextcloud_l10n__WEBPACK_IMPORTED_MODULE_1__.t)('user_ldap', 'Groups')
     };
     const rightTabs = {
-      expert: (0,_nextcloud_l10n__WEBPACK_IMPORTED_MODULE_1__.t)('user_ldap', 'Expert'),
-      advanced: (0,_nextcloud_l10n__WEBPACK_IMPORTED_MODULE_1__.t)('user_ldap', 'Advanced')
+      advanced: (0,_nextcloud_l10n__WEBPACK_IMPORTED_MODULE_1__.t)('user_ldap', 'Advanced'),
+      expert: (0,_nextcloud_l10n__WEBPACK_IMPORTED_MODULE_1__.t)('user_ldap', 'Expert')
     };
     const ldapConfigStore = (0,_store_config__WEBPACK_IMPORTED_MODULE_10__.useLDAPConfigStore)();
     const selectedTab = (0,vue__WEBPACK_IMPORTED_MODULE_11__.ref)('server');
@@ -735,10 +719,10 @@ render._withStripped = true;
 
 /***/ }),
 
-/***/ "./node_modules/babel-loader/lib/index.js!./node_modules/vue-loader/lib/loaders/templateLoader.js??ruleSet[1].rules[3]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./apps/user_ldap/src/components/SettingsTabs/AdvancedTab.vue?vue&type=template&id=63fd50b0":
-/*!***********************************************************************************************************************************************************************************************************************************************************************************!*\
-  !*** ./node_modules/babel-loader/lib/index.js!./node_modules/vue-loader/lib/loaders/templateLoader.js??ruleSet[1].rules[3]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./apps/user_ldap/src/components/SettingsTabs/AdvancedTab.vue?vue&type=template&id=63fd50b0 ***!
-  \***********************************************************************************************************************************************************************************************************************************************************************************/
+/***/ "./node_modules/babel-loader/lib/index.js!./node_modules/vue-loader/lib/loaders/templateLoader.js??ruleSet[1].rules[3]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./apps/user_ldap/src/components/SettingsTabs/AdvancedTab.vue?vue&type=template&id=63fd50b0&scoped=true":
+/*!***********************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib/index.js!./node_modules/vue-loader/lib/loaders/templateLoader.js??ruleSet[1].rules[3]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./apps/user_ldap/src/components/SettingsTabs/AdvancedTab.vue?vue&type=template&id=63fd50b0&scoped=true ***!
+  \***********************************************************************************************************************************************************************************************************************************************************************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 __webpack_require__.r(__webpack_exports__);
@@ -751,69 +735,397 @@ var render = function render() {
     _c = _vm._self._c,
     _setup = _vm._self._setupProxy;
   return _c("fieldset", {
+    staticClass: "ldap-wizard__advanced"
+  }, [_c("summary", {
+    staticClass: "ldap-wizard__advanced__section"
+  }, [_c("h3", [_vm._v(_vm._s(_setup.t("user_ldap", "Connection Settings")))]), _vm._v(" "), _c(_setup.NcCheckboxRadioSwitch, {
     attrs: {
-      id: "ldapSettings-2"
+      checked: _setup.ldapConfig.ldapConfigurationActive,
+      value: "1",
+      "aria-label": _setup.t("user_ldap", "When unchecked, this configuration will be skipped.")
+    },
+    on: {
+      "update:checked": function ($event) {
+        return _vm.$set(_setup.ldapConfig, "ldapConfigurationActive", $event);
+      }
     }
-  }, [_c("p", [_c("strong", [_vm._v(_vm._s(_setup.t("user_ldap", "Internal Username")))])]), _vm._v(" "), _c("p", {
-    staticClass: "ldapIndent"
-  }, [_vm._v("\n\t\t" + _vm._s(_setup.t("user_ldap", "By default the internal username will be created from the UUID attribute. It makes sure that the username is unique and characters do not need to be converted. The internal username has the restriction that only these characters are allowed: [a-zA-Z0-9_.@-]. Other characters are replaced with their ASCII correspondence or simply omitted. On collisions a number will be added/increased. The internal username is used to identify a user internally. It is also the default name for the user home folder. It is also a part of remote URLs, for instance for all DAV services. With this setting, the default behavior can be overridden. Changes will have effect only on newly mapped (added) LDAP users. Leave it empty for default behavior.")) + "\n\t")]), _vm._v(" "), _c("p", {
-    staticClass: "ldapIndent"
-  }, [_c("label", {
+  }, [_vm._v("\n\t\t\t" + _vm._s(_setup.t("user_ldap", "Configuration Active")) + "\n\t\t")]), _vm._v(" "), _c(_setup.NcTextField, {
     attrs: {
-      for: "ldap_expert_username_attr"
+      autocomplete: "off",
+      label: _setup.t("user_ldap", "Backup (Replica) Host"),
+      value: _setup.ldapConfig.ldapBackupHost,
+      "helper-text": _setup.t("user_ldap", "Give an optional backup host. It must be a replica of the main LDAP/AD server.")
+    },
+    on: {
+      "update:value": function ($event) {
+        return _vm.$set(_setup.ldapConfig, "ldapBackupHost", $event);
+      }
     }
-  }, [_vm._v(_vm._s(_setup.t("user_ldap", "Internal Username Attribute:")))]), _vm._v(" "), _c("input", {
+  }), _vm._v(" "), _c(_setup.NcTextField, {
     attrs: {
-      id: "ldap_expert_username_attr",
-      type: "text",
-      name: "ldap_expert_username_attr",
-      "data-default": _setup.ldap_expert_username_attr_default
+      type: "number",
+      value: _setup.ldapConfig.ldapBackupPort,
+      label: _setup.t("user_ldap", "Backup (Replica) Port")
     }
-  })]), _vm._v(" "), _c("p", [_c("strong", [_vm._v(_vm._s(_setup.t("user_ldap", "Override UUID detection")))])]), _vm._v(" "), _c("p", {
-    staticClass: "ldapIndent"
-  }, [_vm._v("\n\t\t" + _vm._s(_setup.t("user_ldap", "By default, the UUID attribute is automatically detected. The UUID attribute is used to doubtlessly identify LDAP users and groups. Also, the internal username will be created based on the UUID, if not specified otherwise above. You can override the setting and pass an attribute of your choice. You must make sure that the attribute of your choice can be fetched for both users and groups and it is unique. Leave it empty for default behavior. Changes will have effect only on newly mapped (added) LDAP users and groups.")) + "\n\t")]), _vm._v(" "), _c("p", {
-    staticClass: "ldapIndent"
-  }, [_c("label", {
+  }), _vm._v(" "), _vm._v('\n\t\t\t">\n\t\t\t' + _vm._s(_setup.t("user_ldap", "Disable Main Server")) + "\n\t\t"), _vm._v(" "), _c(_setup.NcCheckboxRadioSwitch, {
     attrs: {
-      for: "ldap_expert_uuid_user_attr"
+      checked: _setup.ldapConfig.turnOffCertCheck,
+      "aria-label": _setup.t("user_ldap", "Not recommended, use it for testing only! If connection only works with this option, import the LDAP server's SSL certificate in your {instanceName} server.", {
+        instanceName: _setup.instanceName
+      }),
+      value: "1"
+    },
+    on: {
+      "update:checked": function ($event) {
+        return _vm.$set(_setup.ldapConfig, "turnOffCertCheck", $event);
+      }
     }
-  }, [_vm._v(_vm._s(_setup.t("user_ldap", "UUID Attribute for Users:")))]), _vm._v(" "), _c("input", {
+  }, [_vm._v("\n\t\t\t" + _vm._s(_setup.t("user_ldap", "Turn off SSL certificate validation.")) + "\n\t\t")]), _vm._v(" "), _c(_setup.NcTextField, {
     attrs: {
-      id: "ldap_expert_uuid_user_attr",
-      type: "text",
-      name: "ldap_expert_uuid_user_attr",
-      "data-default": _setup.ldap_expert_uuid_user_attr_default
+      type: "number",
+      label: _setup.t("user_ldap", "Cache Time-To-Live"),
+      value: _setup.ldapConfig.ldapCacheTTL,
+      "helper-text": _setup.t("user_ldap", "in seconds. A change empties the cache.")
     }
-  })]), _vm._v(" "), _c("p", {
-    staticClass: "ldapIndent"
-  }, [_c("label", {
+  })], 1), _vm._v(" "), _c("summary", {
+    staticClass: "ldap-wizard__advanced__section"
+  }, [_c("h3", [_vm._v(_vm._s(_setup.t("user_ldap", "Directory Settings")))]), _vm._v(" "), _c(_setup.NcTextField, {
     attrs: {
-      for: "ldap_expert_uuid_group_attr"
+      autocomplete: "off",
+      value: _setup.ldapConfig.ldapUserDisplayName,
+      label: _setup.t("user_ldap", "User Display Name Field"),
+      "helper-text": _setup.t("user_ldap", "The LDAP attribute to use to generate the user's display name.")
+    },
+    on: {
+      "update:value": function ($event) {
+        return _vm.$set(_setup.ldapConfig, "ldapUserDisplayName", $event);
+      }
     }
-  }, [_vm._v(_vm._s(_setup.t("user_ldap", "UUID Attribute for Groups:")))]), _vm._v(" "), _c("input", {
+  }), _vm._v(" "), _c(_setup.NcTextField, {
     attrs: {
-      id: "ldap_expert_uuid_group_attr",
-      type: "text",
-      name: "ldap_expert_uuid_group_attr",
-      "data-default": _setup.ldap_expert_uuid_group_attr_default
+      autocomplete: "off",
+      value: _setup.ldapConfig.ldapUserDisplayName2,
+      label: _setup.t("user_ldap", "2nd User Display Name Field"),
+      "helper-text": _setup.t("user_ldap", "Optional. An LDAP attribute to be added to the display name in brackets. Results in e.g. »John Doe (john.doe@example.org)«.")
+    },
+    on: {
+      "update:value": function ($event) {
+        return _vm.$set(_setup.ldapConfig, "ldapUserDisplayName2", $event);
+      }
     }
-  })]), _vm._v(" "), _c("p", [_c("strong", [_vm._v(_vm._s(_setup.t("user_ldap", "Username-LDAP User Mapping")))])]), _vm._v(" "), _c("p", {
-    staticClass: "ldapIndent"
-  }, [_vm._v("\n\t\t" + _vm._s(_setup.t("user_ldap", "Usernames are used to store and assign metadata. In order to precisely identify and recognize users, each LDAP user will have an internal username. This requires a mapping from username to LDAP user. The created username is mapped to the UUID of the LDAP user. Additionally the DN is cached as well to reduce LDAP interaction, but it is not used for identification. If the DN changes, the changes will be found. The internal username is used all over. Clearing the mappings will have leftovers everywhere. Clearing the mappings is not configuration sensitive, it affects all LDAP configurations! Never clear the mappings in a production environment, only in a testing or experimental stage.")) + "\n\t")]), _vm._v(" "), _c("p", {
-    staticClass: "ldapIndent"
-  }, [_c("button", {
+  }), _vm._v(" "), _c(_setup.NcTextArea, {
     attrs: {
-      id: "ldap_action_clear_user_mappings",
-      type: "button",
-      name: "ldap_action_clear_user_mappings"
+      value: _setup.ldapConfig.ldapBaseUsers,
+      placeholder: _setup.t("user_ldap", "One User Base DN per line"),
+      label: _setup.t("user_ldap", "Base User Tree")
+    },
+    on: {
+      "update:value": function ($event) {
+        return _vm.$set(_setup.ldapConfig, "ldapBaseUsers", $event);
+      }
     }
-  }, [_vm._v("\n\t\t\t" + _vm._s(_setup.t("user_ldap", "Clear Username-LDAP User Mapping")) + "\n\t\t")]), _c("br"), _c("button", {
+  }), _vm._v(" "), _c(_setup.NcTextArea, {
     attrs: {
-      id: "ldap_action_clear_group_mappings",
-      type: "button",
-      name: "ldap_action_clear_group_mappings"
+      value: _setup.ldapConfig.ldapAttributesForUserSearch,
+      placeholder: _setup.t("user_ldap", "Optional; one attribute per line"),
+      label: _setup.t("user_ldap", "Base User Tree"),
+      "helper-text": _setup.t("user_ldap", "User Search Attributes")
+    },
+    on: {
+      "update:value": function ($event) {
+        return _vm.$set(_setup.ldapConfig, "ldapAttributesForUserSearch", $event);
+      }
     }
-  }, [_vm._v("\n\t\t\t" + _vm._s(_setup.t("user_ldap", "Clear Groupname-LDAP Group Mapping")) + "\n\t\t")])]), _vm._v(" "), _vm._v("\n\t" + _vm._s(_setup.settingControls) + "\n")]);
+  }), _vm._v(" "), _c(_setup.NcCheckboxRadioSwitch, {
+    attrs: {
+      checked: _setup.ldapConfig.markRemnantsAsDisabled,
+      value: "1",
+      "aria-label": _setup.t("user_ldap", "When switched on, users imported from LDAP which are then missing will be disabled")
+    },
+    on: {
+      "update:checked": function ($event) {
+        return _vm.$set(_setup.ldapConfig, "markRemnantsAsDisabled", $event);
+      }
+    }
+  }, [_vm._v("\n\t\t\t" + _vm._s(_setup.t("user_ldap", "Disable users missing from LDAP")) + "\n\t\t")]), _vm._v(" "), _c(_setup.NcTextField, {
+    attrs: {
+      autocomplete: "off",
+      value: _setup.ldapConfig.ldapGroupDisplayName,
+      label: _setup.t("user_ldap", "Group Display Name Field"),
+      title: _setup.t("user_ldap", "The LDAP attribute to use to generate the groups's display name.")
+    },
+    on: {
+      "update:value": function ($event) {
+        return _vm.$set(_setup.ldapConfig, "ldapGroupDisplayName", $event);
+      }
+    }
+  }), _vm._v(" "), _c(_setup.NcTextArea, {
+    attrs: {
+      value: _setup.ldapConfig.ldapBaseGroups,
+      placeholder: _setup.t("user_ldap", "One Group Base DN per line"),
+      label: _setup.t("user_ldap", "Base Group Tree")
+    },
+    on: {
+      "update:value": function ($event) {
+        return _vm.$set(_setup.ldapConfig, "ldapBaseGroups", $event);
+      }
+    }
+  }), _vm._v(" "), _c(_setup.NcTextArea, {
+    attrs: {
+      value: _setup.ldapConfig.ldapAttributesForGroupSearch,
+      placeholder: _setup.t("user_ldap", "Optional; one attribute per line"),
+      label: _setup.t("user_ldap", "Group Search Attributes")
+    },
+    on: {
+      "update:value": function ($event) {
+        return _vm.$set(_setup.ldapConfig, "ldapAttributesForGroupSearch", $event);
+      }
+    }
+  }), _vm._v(" "), _c(_setup.NcTextField, {
+    attrs: {
+      autocomplete: "off",
+      label: _setup.t("user_ldap", "Dynamic Group Member URL"),
+      value: _setup.ldapConfig.ldapDynamicGroupMemberURL,
+      "helper-text": _setup.t("user_ldap", "The LDAP attribute that on group objects contains an LDAP search URL that determines what objects belong to the group. (An empty setting disables dynamic group membership functionality.)")
+    },
+    on: {
+      "update:value": function ($event) {
+        return _vm.$set(_setup.ldapConfig, "ldapDynamicGroupMemberURL", $event);
+      }
+    }
+  }), _vm._v(" "), _c(_setup.NcCheckboxRadioSwitch, {
+    attrs: {
+      checked: _setup.ldapConfig.ldapNestedGroups,
+      value: "1",
+      "aria-label": _setup.t("user_ldap", "When switched on, groups that contain groups are supported. (Only works if the group member attribute contains DNs.)")
+    },
+    on: {
+      "update:checked": function ($event) {
+        return _vm.$set(_setup.ldapConfig, "ldapNestedGroups", $event);
+      }
+    }
+  }, [_vm._v("\n\t\t\t" + _vm._s(_setup.t("user_ldap", "Nested Groups")) + "\n\t\t")]), _vm._v(" "), _c(_setup.NcTextField, {
+    attrs: {
+      type: "number",
+      label: _setup.t("user_ldap", "Paging chunksize"),
+      value: _setup.ldapConfig.ldapPagingSize,
+      "helper-text": _setup.t("user_ldap", "Chunksize used for paged LDAP searches that may return bulky results like user or group enumeration. (Setting it 0 disables paged LDAP searches in those situations.)")
+    },
+    on: {
+      "update:value": function ($event) {
+        return _vm.$set(_setup.ldapConfig, "ldapPagingSize", $event);
+      }
+    }
+  }), _vm._v(" "), _c(_setup.NcCheckboxRadioSwitch, {
+    attrs: {
+      checked: _setup.ldapConfig.turnOnPasswordChange,
+      value: "1",
+      "aria-label": _setup.t("user_ldap", "Allow LDAP users to change their password and allow Super Administrators and Group Administrators to change the password of their LDAP users. Only works when access control policies are configured accordingly on the LDAP server. As passwords are sent in plaintext to the LDAP server, transport encryption must be used and password hashing should be configured on the LDAP server.")
+    },
+    on: {
+      "update:checked": function ($event) {
+        return _vm.$set(_setup.ldapConfig, "turnOnPasswordChange", $event);
+      }
+    }
+  }, [_vm._v("\n\t\t\t" + _vm._s(_setup.t("user_ldap", "Enable LDAP password changes per user")) + "\n\t\t")]), _vm._v(" "), _c("span", {
+    staticClass: "tablecell"
+  }, [_vm._v("\n\t\t\t" + _vm._s(_setup.t("user_ldap", "(New password is sent as plain text to LDAP)")) + "\n\t\t")]), _vm._v(" "), _c(_setup.NcTextField, {
+    attrs: {
+      autocomplete: "off",
+      label: _setup.t("user_ldap", "Default password policy DN"),
+      value: _setup.ldapConfig.ldapDefaultPPolicyDN,
+      "helper-text": _setup.t("user_ldap", "The DN of a default password policy that will be used for password expiry handling. Works only when LDAP password changes per user are enabled and is only supported by OpenLDAP. Leave empty to disable password expiry handling.")
+    },
+    on: {
+      "update:value": function ($event) {
+        return _vm.$set(_setup.ldapConfig, "ldapDefaultPPolicyDN", $event);
+      }
+    }
+  })], 1), _vm._v(" "), _c("summary", {
+    staticClass: "ldap-wizard__advanced__section"
+  }, [_c("h3", [_vm._v(_vm._s(_setup.t("user_ldap", "Special Attributes")))]), _vm._v(" "), _c(_setup.NcTextField, {
+    attrs: {
+      autocomplete: "off",
+      value: _setup.ldapConfig.ldapQuotaAttribute,
+      label: _setup.t("user_ldap", "Quota Field"),
+      "helper-text": _setup.t("user_ldap", "Leave empty for user's default quota. Otherwise, specify an LDAP/AD attribute.")
+    },
+    on: {
+      "update:value": function ($event) {
+        return _vm.$set(_setup.ldapConfig, "ldapQuotaAttribute", $event);
+      }
+    }
+  }), _vm._v(" "), _c(_setup.NcTextField, {
+    attrs: {
+      autocomplete: "off",
+      value: _setup.ldapConfig.ldapQuotaDefault,
+      label: _setup.t("user_ldap", "Quota Default"),
+      "helper-text": _setup.t("user_ldap", "Override default quota for LDAP users who do not have a quota set in the Quota Field.")
+    },
+    on: {
+      "update:value": function ($event) {
+        return _vm.$set(_setup.ldapConfig, "ldapQuotaDefault", $event);
+      }
+    }
+  }), _vm._v(" "), _c(_setup.NcTextField, {
+    attrs: {
+      autocomplete: "off",
+      value: _setup.ldapConfig.ldapEmailAttribute,
+      label: _setup.t("user_ldap", "Email Field"),
+      "helper-text": _setup.t("user_ldap", "Set the user's email from their LDAP attribute. Leave it empty for default behaviour.")
+    },
+    on: {
+      "update:value": function ($event) {
+        return _vm.$set(_setup.ldapConfig, "ldapEmailAttribute", $event);
+      }
+    }
+  }), _vm._v(" "), _c(_setup.NcTextField, {
+    attrs: {
+      autocomplete: "off",
+      label: _setup.t("user_ldap", "User Home Folder Naming Rule"),
+      value: _setup.ldapConfig.homeFolderNamingRule,
+      "helper-text": _setup.t("user_ldap", "Leave empty for username (default). Otherwise, specify an LDAP/AD attribute.")
+    },
+    on: {
+      "update:value": function ($event) {
+        return _vm.$set(_setup.ldapConfig, "homeFolderNamingRule", $event);
+      }
+    }
+  }), _vm._v(" "), _c(_setup.NcTextField, {
+    attrs: {
+      autocomplete: "off",
+      label: _setup.t("user_ldap", "`$home` Placeholder Field"),
+      value: _setup.ldapConfig.ldapExtStorageHomeAttribute,
+      "helper-text": _setup.t("user_ldap", "$home in an external storage configuration will be replaced with the value of the specified attribute")
+    },
+    on: {
+      "update:value": function ($event) {
+        return _vm.$set(_setup.ldapConfig, "ldapExtStorageHomeAttribute", $event);
+      }
+    }
+  })], 1), _vm._v(" "), _c("summary", {
+    staticClass: "ldap-wizard__advanced__section"
+  }, [_c("h3", [_vm._v(_vm._s(_setup.t("user_ldap", "User Profile Attributes")))]), _vm._v(" "), _c(_setup.NcTextField, {
+    attrs: {
+      autocomplete: "off",
+      label: _setup.t("user_ldap", "Phone Field"),
+      value: _setup.ldapConfig.ldapAttributePhone,
+      "helper-text": _setup.t("user_ldap", "User profile Phone will be set from the specified attribute")
+    },
+    on: {
+      "update:value": function ($event) {
+        return _vm.$set(_setup.ldapConfig, "ldapAttributePhone", $event);
+      }
+    }
+  }), _vm._v(" "), _c(_setup.NcTextField, {
+    attrs: {
+      autocomplete: "off",
+      label: _setup.t("user_ldap", "Website Field"),
+      value: _setup.ldapConfig.ldapAttributeWebsite,
+      "helper-text": _setup.t("user_ldap", "User profile Website will be set from the specified attribute")
+    },
+    on: {
+      "update:value": function ($event) {
+        return _vm.$set(_setup.ldapConfig, "ldapAttributeWebsite", $event);
+      }
+    }
+  }), _vm._v(" "), _c(_setup.NcTextField, {
+    attrs: {
+      autocomplete: "off",
+      label: _setup.t("user_ldap", "Address Field"),
+      value: _setup.ldapConfig.ldapAttributeAddress,
+      "helper-text": _setup.t("user_ldap", "User profile Address will be set from the specified attribute")
+    },
+    on: {
+      "update:value": function ($event) {
+        return _vm.$set(_setup.ldapConfig, "ldapAttributeAddress", $event);
+      }
+    }
+  }), _vm._v(" "), _c(_setup.NcTextField, {
+    attrs: {
+      autocomplete: "off",
+      label: _setup.t("user_ldap", "Twitter Field"),
+      value: _setup.ldapConfig.ldapAttributeTwitter,
+      "helper-text": _setup.t("user_ldap", "User profile Twitter will be set from the specified attribute")
+    },
+    on: {
+      "update:value": function ($event) {
+        return _vm.$set(_setup.ldapConfig, "ldapAttributeTwitter", $event);
+      }
+    }
+  }), _vm._v(" "), _c(_setup.NcTextField, {
+    attrs: {
+      autocomplete: "off",
+      label: _setup.t("user_ldap", "Fediverse Field"),
+      value: _setup.ldapConfig.ldapAttributeFediverse,
+      "helper-text": _setup.t("user_ldap", "User profile Fediverse will be set from the specified attribute")
+    },
+    on: {
+      "update:value": function ($event) {
+        return _vm.$set(_setup.ldapConfig, "ldapAttributeFediverse", $event);
+      }
+    }
+  }), _vm._v(" "), _c(_setup.NcTextField, {
+    attrs: {
+      autocomplete: "off",
+      label: _setup.t("user_ldap", "Organisation Field"),
+      value: _setup.ldapConfig.ldapAttributeOrganisation,
+      "helper-text": _setup.t("user_ldap", "User profile Organisation will be set from the specified attribute")
+    },
+    on: {
+      "update:value": function ($event) {
+        return _vm.$set(_setup.ldapConfig, "ldapAttributeOrganisation", $event);
+      }
+    }
+  }), _vm._v(" "), _c(_setup.NcTextField, {
+    attrs: {
+      autocomplete: "off",
+      label: _setup.t("user_ldap", "Role Field"),
+      value: _setup.ldapConfig.ldapAttributeRole,
+      "helper-text": _setup.t("user_ldap", "User profile Role will be set from the specified attribute")
+    },
+    on: {
+      "update:value": function ($event) {
+        return _vm.$set(_setup.ldapConfig, "ldapAttributeRole", $event);
+      }
+    }
+  }), _vm._v(" "), _c(_setup.NcTextField, {
+    attrs: {
+      autocomplete: "off",
+      label: _setup.t("user_ldap", "Headline Field"),
+      value: _setup.ldapConfig.ldapAttributeHeadline,
+      "helper-text": _setup.t("user_ldap", "User profile Headline will be set from the specified attribute")
+    },
+    on: {
+      "update:value": function ($event) {
+        return _vm.$set(_setup.ldapConfig, "ldapAttributeHeadline", $event);
+      }
+    }
+  }), _vm._v(" "), _c(_setup.NcTextField, {
+    attrs: {
+      autocomplete: "off",
+      label: _setup.t("user_ldap", "Biography Field"),
+      value: _setup.ldapConfig.ldapAttributeBiography,
+      "helper-text": _setup.t("user_ldap", "User profile Biography will be set from the specified attribute")
+    },
+    on: {
+      "update:value": function ($event) {
+        return _vm.$set(_setup.ldapConfig, "ldapAttributeBiography", $event);
+      }
+    }
+  }), _vm._v(" "), _c(_setup.NcTextField, {
+    attrs: {
+      autocomplete: "off",
+      label: _setup.t("user_ldap", "Birthdate Field"),
+      value: _setup.ldapConfig.ldapAttributeBirthDate,
+      "helper-text": _setup.t("user_ldap", "User profile Date of birth will be set from the specified attribute")
+    },
+    on: {
+      "update:value": function ($event) {
+        return _vm.$set(_setup.ldapConfig, "ldapAttributeBirthDate", $event);
+      }
+    }
+  })], 1)]);
 };
 var staticRenderFns = [];
 render._withStripped = true;
@@ -821,10 +1133,10 @@ render._withStripped = true;
 
 /***/ }),
 
-/***/ "./node_modules/babel-loader/lib/index.js!./node_modules/vue-loader/lib/loaders/templateLoader.js??ruleSet[1].rules[3]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./apps/user_ldap/src/components/SettingsTabs/ExpertTab.vue?vue&type=template&id=47a98ee8":
-/*!*********************************************************************************************************************************************************************************************************************************************************************************!*\
-  !*** ./node_modules/babel-loader/lib/index.js!./node_modules/vue-loader/lib/loaders/templateLoader.js??ruleSet[1].rules[3]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./apps/user_ldap/src/components/SettingsTabs/ExpertTab.vue?vue&type=template&id=47a98ee8 ***!
-  \*********************************************************************************************************************************************************************************************************************************************************************************/
+/***/ "./node_modules/babel-loader/lib/index.js!./node_modules/vue-loader/lib/loaders/templateLoader.js??ruleSet[1].rules[3]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./apps/user_ldap/src/components/SettingsTabs/ExpertTab.vue?vue&type=template&id=47a98ee8&scoped=true":
+/*!*********************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib/index.js!./node_modules/vue-loader/lib/loaders/templateLoader.js??ruleSet[1].rules[3]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./apps/user_ldap/src/components/SettingsTabs/ExpertTab.vue?vue&type=template&id=47a98ee8&scoped=true ***!
+  \*********************************************************************************************************************************************************************************************************************************************************************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 __webpack_require__.r(__webpack_exports__);
@@ -837,620 +1149,70 @@ var render = function render() {
     _c = _vm._self._c,
     _setup = _vm._self._setupProxy;
   return _c("fieldset", {
-    attrs: {
-      id: "ldapSettings-1"
-    }
+    staticClass: "ldap-wizard__expert"
   }, [_c("div", {
+    staticClass: "ldap-wizard__expert__line"
+  }, [_c("strong", [_vm._v(_vm._s(_setup.t("user_ldap", "Internal Username")))]), _vm._v(" "), _c("label", {
     attrs: {
-      id: "ldapAdvancedAccordion"
+      for: "ldap_expert_username_attr"
     }
-  }, [_c("h3", [_vm._v(_vm._s(_setup.t("user_ldap", "Connection Settings")))]), _vm._v(" "), _c("div", [_c("p", [_c("label", {
+  }, [_vm._v(_vm._s(_setup.t("user_ldap", "By default the internal username will be created from the UUID attribute. It makes sure that the username is unique and characters do not need to be converted. The internal username has the restriction that only these characters are allowed: [a-zA-Z0-9_.@-]. Other characters are replaced with their ASCII correspondence or simply omitted. On collisions a number will be added/increased. The internal username is used to identify a user internally. It is also the default name for the user home folder. It is also a part of remote URLs, for instance for all DAV services. With this setting, the default behavior can be overridden. Changes will have effect only on newly mapped (added) LDAP users. Leave it empty for default behavior.")))]), _vm._v(" "), _c(_setup.NcTextField, {
     attrs: {
-      for: "ldap_configuration_active"
-    }
-  }, [_vm._v(_vm._s(_setup.t("user_ldap", "Configuration Active")))]), _vm._v(" "), _c("input", {
-    attrs: {
-      id: "ldap_configuration_active",
-      type: "checkbox",
-      name: "ldap_configuration_active",
-      value: "1",
-      "data-default": _setup.ldapConfigStore.defaultLdapConfig.ldapConfigurationActive,
-      "aria-describedby": "ldap_configuration_active_instructions",
-      title: _setup.t("user_ldap", "When unchecked, this configuration will be skipped.")
-    }
-  })]), _vm._v(" "), _c("p", {
-    staticClass: "hidden-visually",
-    attrs: {
-      id: "ldap_configuration_active_instructions"
-    }
-  }, [_vm._v("\n\t\t\t\t" + _vm._s(_setup.t("user_ldap", "When unchecked, this configuration will be skipped.")) + "\n\t\t\t")]), _vm._v(" "), _c("p", [_c("label", {
-    attrs: {
-      for: "ldap_backup_host"
-    }
-  }, [_vm._v(_vm._s(_setup.t("user_ldap", "Backup (Replica) Host")))]), _vm._v(" "), _c("input", {
-    attrs: {
-      id: "ldap_backup_host",
-      type: "text",
-      name: "ldap_backup_host",
-      "data-default": _setup.ldapConfigStore.defaultLdapConfig.ldapBackupHost,
-      "aria-describedby": "ldap_backup_host_instructions",
-      title: _setup.t("user_ldap", "Give an optional backup host. It must be a replica of the main LDAP/AD server.")
-    }
-  })]), _vm._v(" "), _c("p", {
-    staticClass: "hidden-visually",
-    attrs: {
-      id: "ldap_backup_host_instructions"
-    }
-  }, [_vm._v("\n\t\t\t\t" + _vm._s(_setup.t("user_ldap", "Give an optional backup host. It must be a replica of the main LDAP/AD server.")) + "\n\t\t\t")]), _vm._v(" "), _c("p", [_c("label", {
-    attrs: {
-      for: "ldap_backup_port"
-    }
-  }, [_vm._v(_vm._s(_setup.t("user_ldap", "Backup (Replica) Port")))]), _vm._v(" "), _c("input", {
-    attrs: {
-      id: "ldap_backup_port",
-      type: "number",
-      name: "ldap_backup_port",
-      "data-default": _setup.ldapConfigStore.defaultLdapConfig.ldapBackupPort
-    }
-  })]), _vm._v(" "), _c("p", [_c("label", {
-    attrs: {
-      for: "ldap_override_main_server"
-    }
-  }, [_vm._v(_vm._s(_setup.t("user_ldap", "Disable Main Server")))]), _vm._v(" "), _c("input", {
-    attrs: {
-      id: "ldap_override_main_server",
-      type: "checkbox",
-      name: "ldap_override_main_server",
-      value: "1",
-      "data-default": _setup.ldapConfigStore.defaultLdapConfig.ldapOverrideMainServer,
-      "aria-describedby": "ldap_override_main_server_instructions",
-      title: _setup.t("user_ldap", "Only connect to the replica server.")
-    }
-  })]), _vm._v(" "), _c("p", {
-    staticClass: "hidden-visually",
-    attrs: {
-      id: "ldap_override_main_server_instructions"
-    }
-  }, [_vm._v("\n\t\t\t\t" + _vm._s(_setup.t("user_ldap", "Only connect to the replica server.")) + "\n\t\t\t")]), _vm._v(" "), _c("p", [_c("label", {
-    attrs: {
-      for: "ldap_turn_off_cert_check"
-    }
-  }, [_vm._v(_vm._s(_setup.t("user_ldap", "Turn off SSL certificate validation.")))]), _vm._v(" "), _c("input", {
-    attrs: {
-      id: "ldap_turn_off_cert_check",
-      type: "checkbox",
-      name: "ldap_turn_off_cert_check",
-      "aria-describedby": "ldap_turn_off_cert_check_instructions",
-      title: _setup.t("user_ldap", "Not recommended, use it for testing only! If connection only works with this option, import the LDAP server's SSL certificate in your {serverName} server.", {
-        serverName: _setup.theme.getName()
-      }),
-      "data-default": _setup.ldapConfigStore.defaultLdapConfig.ldapTurnOffCertCheck,
-      value: "1"
-    }
-  })]), _vm._v(" "), _c("p", {
-    staticClass: "hidden-visually",
-    attrs: {
-      id: "ldap_turn_off_cert_check_instructions"
-    }
-  }, [_vm._v("\n\t\t\t\t" + _vm._s(_setup.t("user_ldap", "Not recommended, use it for testing only! If connection only works with this option, import the LDAP server's SSL certificate in your {serverName} server.", {
-    serverName: _setup.theme.getName()
-  })) + "\n\t\t\t")]), _vm._v(" "), _c("br"), _vm._v(" "), _c("p", [_c("label", {
-    attrs: {
-      for: "ldap_cache_ttl"
-    }
-  }, [_vm._v(_vm._s(_setup.t("user_ldap", "Cache Time-To-Live")))]), _vm._v(" "), _c("input", {
-    attrs: {
-      id: "ldap_cache_ttl",
-      type: "number",
-      name: "ldap_cache_ttl",
-      "aria-describedby": "ldap_cache_ttl_instructions",
-      title: _setup.t("user_ldap", "in seconds. A change empties the cache."),
-      "data-default": _setup.ldapConfigStore.defaultLdapConfig.ldapCacheTtl
-    }
-  })]), _vm._v(" "), _c("p", {
-    staticClass: "hidden-visually",
-    attrs: {
-      id: "ldap_cache_ttl_instructions"
-    }
-  }, [_vm._v("\n\t\t\t\t" + _vm._s(_setup.t("user_ldap", "in seconds. A change empties the cache.")) + "\n\t\t\t")])]), _vm._v(" "), _c("h3", [_vm._v(_vm._s(_setup.t("user_ldap", "Directory Settings")))]), _vm._v(" "), _c("div", [_c("p", [_c("label", {
-    attrs: {
-      for: "ldap_display_name"
-    }
-  }, [_vm._v(_vm._s(_setup.t("user_ldap", "User Display Name Field")))]), _vm._v(" "), _c("input", {
-    attrs: {
-      id: "ldap_display_name",
-      type: "text",
-      name: "ldap_display_name",
-      "data-default": _setup.ldapConfigStore.defaultLdapConfig.ldapDisplayName,
-      "aria-describedby": "ldap_display_name_instructions",
-      title: _setup.t("user_ldap", "The LDAP attribute to use to generate the user's display name.")
-    }
-  })]), _vm._v(" "), _c("p", {
-    staticClass: "hidden-visually",
-    attrs: {
-      id: "ldap_display_name_instructions"
-    }
-  }, [_vm._v("\n\t\t\t\t" + _vm._s(_setup.t("user_ldap", "The LDAP attribute to use to generate the user's display name.")) + "\n\t\t\t")]), _vm._v(" "), _c("p", [_c("label", {
-    attrs: {
-      for: "ldap_user_display_name_2"
-    }
-  }, [_vm._v(_vm._s(_setup.t("user_ldap", "2nd User Display Name Field")))]), _vm._v(" "), _c("input", {
-    attrs: {
-      id: "ldap_user_display_name_2",
-      type: "text",
-      name: "ldap_user_display_name_2",
-      "data-default": _setup.ldapConfigStore.defaultLdapConfig.ldapUserDisplayName2,
-      "aria-describedby": "ldap_user_display_name_2_instructions",
-      title: _setup.t("user_ldap", "Optional. An LDAP attribute to be added to the display name in brackets. Results in e.g. »John Doe (john.doe@example.org)«.")
-    }
-  })]), _vm._v(" "), _c("p", {
-    staticClass: "hidden-visually",
-    attrs: {
-      id: "ldap_user_display_name_2_instructions"
-    }
-  }, [_vm._v("\n\t\t\t\t" + _vm._s(_setup.t("user_ldap", "Optional. An LDAP attribute to be added to the display name in brackets. Results in e.g. »John Doe (john.doe@example.org)«.")) + "\n\t\t\t")]), _vm._v(" "), _c("p", [_c("label", {
-    attrs: {
-      for: "ldap_base_users"
-    }
-  }, [_vm._v(_vm._s(_setup.t("user_ldap", "Base User Tree")))]), _c("textarea", {
-    attrs: {
-      id: "ldap_base_users",
-      name: "ldap_base_users",
-      placeholder: _setup.t("user_ldap", "One User Base DN per line"),
-      "data-default": _setup.ldapConfigStore.defaultLdapConfig.ldapBaseUsers,
-      "aria-describedby": "ldap_base_users_instructions",
-      title: _setup.t("user_ldap", "Base User Tree")
-    }
-  })]), _vm._v(" "), _c("p", {
-    staticClass: "hidden-visually",
-    attrs: {
-      id: "ldap_base_users_instructions"
-    }
-  }, [_vm._v("\n\t\t\t\t" + _vm._s(_setup.t("user_ldap", "Base User Tree")) + "\n\t\t\t")]), _vm._v(" "), _c("p", [_c("label", {
-    attrs: {
-      for: "ldap_attributes_for_user_search"
-    }
-  }, [_vm._v(_vm._s(_setup.t("user_ldap", "User Search Attributes")))]), _c("textarea", {
-    attrs: {
-      id: "ldap_attributes_for_user_search",
-      name: "ldap_attributes_for_user_search",
-      placeholder: _setup.t("user_ldap", "Optional; one attribute per line"),
-      "data-default": _setup.ldapConfigStore.defaultLdapConfig.ldapAttributesForUserSearch,
-      "aria-describedby": "ldap_attributes_for_user_search_instructions",
-      title: _setup.t("user_ldap", "User Search Attributes")
-    }
-  })]), _vm._v(" "), _c("p", {
-    staticClass: "hidden-visually",
-    attrs: {
-      id: "ldap_attributes_for_user_search_instructions"
-    }
-  }, [_vm._v("\n\t\t\t\t" + _vm._s(_setup.t("user_ldap", "User Search Attributes")) + "\n\t\t\t")]), _vm._v(" "), _c("p", [_c("label", {
-    attrs: {
-      for: "ldap_mark_remnants_as_disabled"
-    }
-  }, [_vm._v(_vm._s(_setup.t("user_ldap", "Disable users missing from LDAP")))]), _vm._v(" "), _c("input", {
-    attrs: {
-      id: "ldap_mark_remnants_as_disabled",
-      type: "checkbox",
-      name: "ldap_mark_remnants_as_disabled",
-      value: "1",
-      "data-default": _setup.ldapConfigStore.defaultLdapConfig.ldapMarkRemnantsAsDisabled,
-      "aria-describedby": "ldap_mark_remnants_as_disabled_instructions",
-      title: _setup.t("user_ldap", "When switched on, users imported from LDAP which are then missing will be disabled")
-    }
-  })]), _vm._v(" "), _c("p", {
-    staticClass: "hidden-visually",
-    attrs: {
-      id: "ldap_mark_remnants_as_disabled_instructions"
-    }
-  }, [_vm._v("\n\t\t\t\t" + _vm._s(_setup.t("user_ldap", "When switched on, users imported from LDAP which are then missing will be disabled")) + "\n\t\t\t")]), _vm._v(" "), _c("p", [_c("label", {
-    attrs: {
-      for: "ldap_group_display_name"
-    }
-  }, [_vm._v(_vm._s(_setup.t("user_ldap", "Group Display Name Field")))]), _vm._v(" "), _c("input", {
-    attrs: {
-      id: "ldap_group_display_name",
-      type: "text",
-      name: "ldap_group_display_name",
-      "data-default": _setup.ldapConfigStore.defaultLdapConfig.ldapGroupDisplayName,
-      "aria-describedby": "ldap_group_display_name_instructions",
-      title: _setup.t("user_ldap", "The LDAP attribute to use to generate the groups's display name.")
-    }
-  })]), _vm._v(" "), _c("p", {
-    staticClass: "hidden-visually",
-    attrs: {
-      id: "ldap_group_display_name_instructions"
-    }
-  }, [_vm._v("\n\t\t\t\t" + _vm._s(_setup.t("user_ldap", "The LDAP attribute to use to generate the groups's display name.")) + "\n\t\t\t")]), _vm._v(" "), _c("p", [_c("label", {
-    attrs: {
-      for: "ldap_base_groups"
-    }
-  }, [_vm._v(_vm._s(_setup.t("user_ldap", "Base Group Tree")))]), _c("textarea", {
-    attrs: {
-      id: "ldap_base_groups",
-      name: "ldap_base_groups",
-      placeholder: _setup.t("user_ldap", "One Group Base DN per line"),
-      "data-default": _setup.ldapConfigStore.defaultLdapConfig.ldapBaseGroups,
-      "aria-describedby": "ldap_base_groups_instructions",
-      title: _setup.t("user_ldap", "Base Group Tree")
-    }
-  })]), _vm._v(" "), _c("p", {
-    staticClass: "hidden-visually",
-    attrs: {
-      id: "ldap_base_groups_instructions"
-    }
-  }, [_vm._v("\n\t\t\t\t" + _vm._s(_setup.t("user_ldap", "Base Group Tree")) + "\n\t\t\t")]), _vm._v(" "), _c("p", [_c("label", {
-    attrs: {
-      for: "ldap_attributes_for_group_search"
-    }
-  }, [_vm._v(_vm._s(_setup.t("user_ldap", "Group Search Attributes")))]), _c("textarea", {
-    attrs: {
-      id: "ldap_attributes_for_group_search",
-      name: "ldap_attributes_for_group_search",
-      placeholder: _setup.t("user_ldap", "Optional; one attribute per line"),
-      "data-default": _setup.ldapConfigStore.defaultLdapConfig.ldapAttributesForGroupSearch,
-      "aria-describedby": "ldap_attributes_for_group_search_instructions",
-      title: _setup.t("user_ldap", "Group Search Attributes")
-    }
-  })]), _vm._v(" "), _c("p", {
-    staticClass: "hidden-visually",
-    attrs: {
-      id: "ldap_attributes_for_group_search_instructions"
-    }
-  }, [_vm._v("\n\t\t\t\t" + _vm._s(_setup.t("user_ldap", "Group Search Attributes")) + "\n\t\t\t")]), _vm._v(" "), _c("p", [_c("label", {
-    attrs: {
-      for: "ldap_group_member_assoc_attribute"
-    }
-  }, [_vm._v(_vm._s(_setup.t("user_ldap", "Group-Member association")))]), _c("select", {
-    attrs: {
-      id: "ldap_group_member_assoc_attribute",
-      name: "ldap_group_member_assoc_attribute",
-      "data-default": _setup.ldapConfigStore.defaultLdapConfig.ldapGroupMemberAssocAttribute
-    }
-  }, [_c("option", {
-    attrs: {
-      value: "uniqueMember"
+      id: "ldap_expert_username_attr",
+      autocomplete: "off",
+      label: _setup.t("user_ldap", "Internal Username Attribute:"),
+      value: _setup.ldapConfig.ldapExpertUsernameAttr,
+      "label-outside": true
     },
-    domProps: {
-      selected: _vm.ldap_group_member_assoc_attribute === "uniqueMember"
+    on: {
+      "update:value": function ($event) {
+        return _vm.$set(_setup.ldapConfig, "ldapExpertUsernameAttr", $event);
+      }
     }
-  }, [_vm._v("\n\t\t\t\t\t\t" + _vm._s(_setup.t("user_ldap", "uniqueMember")) + "\n\t\t\t\t\t")]), _vm._v(" "), _c("option", {
+  })], 1), _vm._v(" "), _c("div", {
+    staticClass: "ldap-wizard__expert__line"
+  }, [_c("strong", [_vm._v(_vm._s(_setup.t("user_ldap", "Override UUID detection")))]), _vm._v(" "), _c("label", {
     attrs: {
-      value: "memberUid"
+      for: "ldap_expert_uuid_user_attr"
+    }
+  }, [_vm._v(_vm._s(_setup.t("user_ldap", "By default, the UUID attribute is automatically detected. The UUID attribute is used to doubtlessly identify LDAP users and groups. Also, the internal username will be created based on the UUID, if not specified otherwise above. You can override the setting and pass an attribute of your choice. You must make sure that the attribute of your choice can be fetched for both users and groups and it is unique. Leave it empty for default behavior. Changes will have effect only on newly mapped (added) LDAP users and groups.")))]), _vm._v(" "), _c(_setup.NcTextField, {
+    attrs: {
+      id: "ldap_expert_uuid_user_attr",
+      autocomplete: "off",
+      label: _setup.t("user_ldap", "UUID Attribute for Users"),
+      value: _setup.ldapConfig.ldapExpertUUIDUserAttr
     },
-    domProps: {
-      selected: _vm.ldap_group_member_assoc_attribute === "memberUid"
+    on: {
+      "update:value": function ($event) {
+        return _vm.$set(_setup.ldapConfig, "ldapExpertUUIDUserAttr", $event);
+      }
     }
-  }, [_vm._v("\n\t\t\t\t\t\t" + _vm._s(_setup.t("user_ldap", "memberUid")) + "\n\t\t\t\t\t")]), _vm._v(" "), _c("option", {
+  }), _vm._v(" "), _c(_setup.NcTextField, {
     attrs: {
-      value: "member"
+      autocomplete: "off",
+      label: _setup.t("user_ldap", "UUID Attribute for Groups"),
+      value: _setup.ldapConfig.ldapExpertUUIDGroupAttr
     },
-    domProps: {
-      selected: _vm.ldap_group_member_assoc_attribute === "member"
+    on: {
+      "update:value": function ($event) {
+        return _vm.$set(_setup.ldapConfig, "ldapExpertUUIDGroupAttr", $event);
+      }
     }
-  }, [_vm._v("\n\t\t\t\t\t\t" + _vm._s(_setup.t("user_ldap", "member (AD)")) + "\n\t\t\t\t\t")]), _vm._v(" "), _c("option", {
+  })], 1), _vm._v(" "), _c("div", {
+    staticClass: "ldap-wizard__expert__line"
+  }, [_c("strong", [_vm._v(_vm._s(_setup.t("user_ldap", "Username-LDAP User Mapping")))]), _vm._v("\n\t\t" + _vm._s(_setup.t("user_ldap", "Usernames are used to store and assign metadata. In order to precisely identify and recognize users, each LDAP user will have an internal username. This requires a mapping from username to LDAP user. The created username is mapped to the UUID of the LDAP user. Additionally the DN is cached as well to reduce LDAP interaction, but it is not used for identification. If the DN changes, the changes will be found. The internal username is used all over. Clearing the mappings will have leftovers everywhere. Clearing the mappings is not configuration sensitive, it affects all LDAP configurations! Never clear the mappings in a production environment, only in a testing or experimental stage.")) + "\n\t\t"), _c(_setup.NcButton, {
     attrs: {
-      value: "gidNumber"
-    },
-    domProps: {
-      selected: _vm.ldap_group_member_assoc_attribute === "gidNumber"
+      id: "ldap_action_clear_user_mappings",
+      type: "button",
+      name: "ldap_action_clear_user_mappings"
     }
-  }, [_vm._v("\n\t\t\t\t\t\t" + _vm._s(_setup.t("user_ldap", "gidNumber")) + "\n\t\t\t\t\t")]), _vm._v(" "), _c("option", {
+  }, [_vm._v("\n\t\t\t" + _vm._s(_setup.t("user_ldap", "Clear Username-LDAP User Mapping")) + "\n\t\t")]), _vm._v(" "), _c(_setup.NcButton, {
     attrs: {
-      value: "zimbraMailForwardingAddress"
-    },
-    domProps: {
-      selected: _vm.ldap_group_member_assoc_attribute === "zimbraMailForwardingAddress"
+      id: "ldap_action_clear_group_mappings",
+      type: "button",
+      name: "ldap_action_clear_group_mappings"
     }
-  }, [_vm._v("\n\t\t\t\t\t\t" + _vm._s(_setup.t("user_ldap", "zimbraMailForwardingAddress")) + "\n\t\t\t\t\t")])])]), _vm._v(" "), _c("p", [_c("label", {
-    attrs: {
-      for: "ldap_dynamic_group_member_url"
-    }
-  }, [_vm._v(_vm._s(_setup.t("user_ldap", "Dynamic Group Member URL")))]), _vm._v(" "), _c("input", {
-    attrs: {
-      id: "ldap_dynamic_group_member_url",
-      type: "text",
-      name: "ldap_dynamic_group_member_url",
-      "aria-describedby": "ldap_dynamic_group_member_url_instructions",
-      title: _setup.t("user_ldap", "The LDAP attribute that on group objects contains an LDAP search URL that determines what objects belong to the group. (An empty setting disables dynamic group membership functionality.)"),
-      "data-default": _setup.ldapConfigStore.defaultLdapConfig.ldapDynamicGroupMemberUrl
-    }
-  })]), _vm._v(" "), _c("p", {
-    staticClass: "hidden-visually",
-    attrs: {
-      id: "ldap_dynamic_group_member_url_instructions"
-    }
-  }, [_vm._v("\n\t\t\t\t" + _vm._s(_setup.t("user_ldap", "The LDAP attribute that on group objects contains an LDAP search URL that determines what objects belong to the group. (An empty setting disables dynamic group membership functionality.)")) + "\n\t\t\t")]), _vm._v(" "), _c("p", [_c("label", {
-    attrs: {
-      for: "ldap_nested_groups"
-    }
-  }, [_vm._v(_vm._s(_setup.t("user_ldap", "Nested Groups")))]), _vm._v(" "), _c("input", {
-    attrs: {
-      id: "ldap_nested_groups",
-      type: "checkbox",
-      name: "ldap_nested_groups",
-      value: "1",
-      "data-default": _setup.ldapConfigStore.defaultLdapConfig.ldapNestedGroups,
-      "aria-describedby": "ldap_nested_groups_instructions",
-      title: _setup.t("user_ldap", "When switched on, groups that contain groups are supported. (Only works if the group member attribute contains DNs.)")
-    }
-  })]), _vm._v(" "), _c("p", {
-    staticClass: "hidden-visually",
-    attrs: {
-      id: "ldap_nested_groups_instructions"
-    }
-  }, [_vm._v("\n\t\t\t\t" + _vm._s(_setup.t("user_ldap", "When switched on, groups that contain groups are supported. (Only works if the group member attribute contains DNs.)")) + "\n\t\t\t")]), _vm._v(" "), _c("p", [_c("label", {
-    attrs: {
-      for: "ldap_paging_size"
-    }
-  }, [_vm._v(_vm._s(_setup.t("user_ldap", "Paging chunksize")))]), _vm._v(" "), _c("input", {
-    attrs: {
-      id: "ldap_paging_size",
-      type: "number",
-      name: "ldap_paging_size",
-      "aria-describedby": "ldap_paging_size_instructions",
-      title: _setup.t("user_ldap", "Chunksize used for paged LDAP searches that may return bulky results like user or group enumeration. (Setting it 0 disables paged LDAP searches in those situations.)"),
-      "data-default": _setup.ldapConfigStore.defaultLdapConfig.ldapPagingSize
-    }
-  })]), _vm._v(" "), _c("p", {
-    staticClass: "hidden-visually",
-    attrs: {
-      id: "ldap_paging_size_instructions"
-    }
-  }, [_vm._v("\n\t\t\t\t" + _vm._s(_setup.t("user_ldap", "Chunksize used for paged LDAP searches that may return bulky results like user or group enumeration. (Setting it 0 disables paged LDAP searches in those situations.)")) + "\n\t\t\t")]), _vm._v(" "), _c("p", [_c("label", {
-    attrs: {
-      for: "ldap_turn_on_pwd_change"
-    }
-  }, [_vm._v(_vm._s(_setup.t("user_ldap", "Enable LDAP password changes per user")))]), _c("span", {
-    staticClass: "inlinetable"
-  }, [_c("span", {
-    staticClass: "tablerow left"
-  }, [_c("input", {
-    attrs: {
-      id: "ldap_turn_on_pwd_change",
-      type: "checkbox",
-      name: "ldap_turn_on_pwd_change",
-      value: "1",
-      "data-default": _setup.ldapConfigStore.defaultLdapConfig.ldapTurnOnPwdChange,
-      "aria-describedby": "ldap_turn_on_pwd_change_instructions",
-      title: _setup.t("user_ldap", "Allow LDAP users to change their password and allow Super Administrators and Group Administrators to change the password of their LDAP users. Only works when access control policies are configured accordingly on the LDAP server. As passwords are sent in plaintext to the LDAP server, transport encryption must be used and password hashing should be configured on the LDAP server.")
-    }
-  }), _c("p", {
-    staticClass: "hidden-visually",
-    attrs: {
-      id: "ldap_turn_on_pwd_change_instructions"
-    }
-  }, [_vm._v(_vm._s(_setup.t("user_ldap", "Allow LDAP users to change their password and allow Super Administrators and Group Administrators to change the password of their LDAP users. Only works when access control policies are configured accordingly on the LDAP server. As passwords are sent in plaintext to the LDAP server, transport encryption must be used and password hashing should be configured on the LDAP server.")))]), _c("span", {
-    staticClass: "tablecell"
-  }, [_vm._v(_vm._s(_setup.t("user_ldap", "(New password is sent as plain text to LDAP)")))])])]), _c("br")]), _vm._v(" "), _c("p", [_c("label", {
-    attrs: {
-      for: "ldapConfigStore.defaultLdapConfig.ldapPpolicyDn"
-    }
-  }, [_vm._v(_vm._s(_setup.t("user_ldap", "Default password policy DN")))]), _vm._v(" "), _c("input", {
-    attrs: {
-      id: "ldapConfigStore.defaultLdapConfig.ldapPpolicyDn",
-      type: "text",
-      name: "ldapConfigStore.defaultLdapConfig.ldapPpolicyDn",
-      "aria-describedby": "ldapConfigStore.defaultLdapConfig.ldapPpolicyDnInstructions",
-      title: _setup.t("user_ldap", "The DN of a default password policy that will be used for password expiry handling. Works only when LDAP password changes per user are enabled and is only supported by OpenLDAP. Leave empty to disable password expiry handling."),
-      "data-default": _setup.ldapConfigStore.defaultLdapConfig.ldapPpolicyDn
-    }
-  })]), _vm._v(" "), _c("p", {
-    staticClass: "hidden-visually",
-    attrs: {
-      id: "ldapConfigStore.defaultLdapConfig.ldapPpolicyDnInstructions"
-    }
-  }, [_vm._v("\n\t\t\t\t" + _vm._s(_setup.t("user_ldap", "The DN of a default password policy that will be used for password expiry handling. Works only when LDAP password changes per user are enabled and is only supported by OpenLDAP. Leave empty to disable password expiry handling.")) + "\n\t\t\t")])]), _vm._v(" "), _c("h3", [_vm._v(_vm._s(_setup.t("user_ldap", "Special Attributes")))]), _vm._v(" "), _c("div", [_c("p", [_c("label", {
-    attrs: {
-      for: "ldap_quota_attr"
-    }
-  }, [_vm._v(_vm._s(_setup.t("user_ldap", "Quota Field")))]), _vm._v(" "), _c("input", {
-    attrs: {
-      id: "ldap_quota_attr",
-      type: "text",
-      name: "ldap_quota_attr",
-      "data-default": _setup.ldapConfigStore.defaultLdapConfig.ldapQuotaAttr,
-      "aria-describedby": "ldap_quota_attr_instructions",
-      title: _setup.t("user_ldap", "Leave empty for user's default quota. Otherwise, specify an LDAP/AD attribute.")
-    }
-  })]), _vm._v(" "), _c("p", {
-    staticClass: "hidden-visually",
-    attrs: {
-      id: "ldap_quota_attr_instructions"
-    }
-  }, [_vm._v("\n\t\t\t\t" + _vm._s(_setup.t("user_ldap", "Leave empty for user's default quota. Otherwise, specify an LDAP/AD attribute.")) + "\n\t\t\t")]), _vm._v(" "), _c("p", [_c("label", {
-    attrs: {
-      for: "ldap_quota_def"
-    }
-  }, [_vm._v(_vm._s(_setup.t("user_ldap", "Quota Default")))]), _vm._v(" "), _c("input", {
-    attrs: {
-      id: "ldap_quota_def",
-      type: "text",
-      name: "ldap_quota_def",
-      "data-default": _setup.ldapConfigStore.defaultLdapConfig.ldapQuotaDef,
-      "aria-describedby": "ldap_quota_def_instructions",
-      title: _setup.t("user_ldap", "Override default quota for LDAP users who do not have a quota set in the Quota Field.")
-    }
-  })]), _vm._v(" "), _c("p", {
-    staticClass: "hidden-visually",
-    attrs: {
-      id: "ldap_quota_def_instructions"
-    }
-  }, [_vm._v("\n\t\t\t\t" + _vm._s(_setup.t("user_ldap", "Override default quota for LDAP users who do not have a quota set in the Quota Field.")) + "\n\t\t\t")]), _vm._v(" "), _c("p", [_c("label", {
-    attrs: {
-      for: "ldap_email_attr"
-    }
-  }, [_vm._v(_vm._s(_setup.t("user_ldap", "Email Field")))]), _vm._v(" "), _c("input", {
-    attrs: {
-      id: "ldap_email_attr",
-      type: "text",
-      name: "ldap_email_attr",
-      "data-default": _setup.ldapConfigStore.defaultLdapConfig.ldapEmailAttr,
-      "aria-describedby": "ldap_email_attr_instructions",
-      title: _setup.t("user_ldap", "Set the user's email from their LDAP attribute. Leave it empty for default behaviour.")
-    }
-  })]), _vm._v(" "), _c("p", {
-    staticClass: "hidden-visually",
-    attrs: {
-      id: "ldap_email_attr_instructions"
-    }
-  }, [_vm._v("\n\t\t\t\t" + _vm._s(_setup.t("user_ldap", "Set the user's email from their LDAP attribute. Leave it empty for default behaviour.")) + "\n\t\t\t")]), _vm._v(" "), _c("p", [_c("label", {
-    attrs: {
-      for: "home_folder_naming_rule"
-    }
-  }, [_vm._v(_vm._s(_setup.t("user_ldap", "User Home Folder Naming Rule")))]), _vm._v(" "), _c("input", {
-    attrs: {
-      id: "home_folder_naming_rule",
-      type: "text",
-      name: "home_folder_naming_rule",
-      "aria-describedby": "home_folder_naming_rule_instructions",
-      title: _setup.t("user_ldap", "Leave empty for username (default). Otherwise, specify an LDAP/AD attribute."),
-      "data-default": _setup.ldapConfigStore.defaultLdapConfig.homeFolderNamingRule
-    }
-  })]), _vm._v(" "), _c("p", {
-    staticClass: "hidden-visually",
-    attrs: {
-      id: "home_folder_naming_rule_instructions"
-    }
-  }, [_vm._v("\n\t\t\t\t" + _vm._s(_setup.t("user_ldap", "Leave empty for username (default). Otherwise, specify an LDAP/AD attribute.")) + "\n\t\t\t")]), _vm._v(" "), _c("p", [_c("label", {
-    attrs: {
-      for: "ldap_ext_storage_home_attribute"
-    }
-  }, [_vm._v(" " + _vm._s(_setup.t("user_ldap", '"$home" Placeholder Field')))]), _vm._v(" "), _c("input", {
-    attrs: {
-      id: "ldap_ext_storage_home_attribute",
-      type: "text",
-      name: "ldap_ext_storage_home_attribute",
-      "aria-describedby": "ldap_ext_storage_home_attribute_instructions",
-      title: _setup.t("user_ldap", "$home in an external storage configuration will be replaced with the value of the specified attribute"),
-      "data-default": _setup.ldapConfigStore.defaultLdapConfig.ldapExtStorageHomeAttribute
-    }
-  })]), _vm._v(" "), _c("p", {
-    staticClass: "hidden-visually",
-    attrs: {
-      id: "ldap_ext_storage_home_attribute_instructions"
-    }
-  }, [_vm._v("\n\t\t\t\t" + _vm._s(_setup.t("user_ldap", "$home in an external storage configuration will be replaced with the value of the specified attribute")) + "\n\t\t\t")])]), _vm._v(" "), _c("h3", [_vm._v("\n\t\t\t" + _vm._s(_setup.t("user_ldap", "User Profile Attributes")) + "\n\t\t")]), _vm._v(" "), _c("div", [_c("p", [_c("label", {
-    attrs: {
-      for: "ldap_attr_phone"
-    }
-  }, [_vm._v(" " + _vm._s(_setup.t("user_ldap", "Phone Field")))]), _vm._v(" "), _c("input", {
-    attrs: {
-      id: "ldap_attr_phone",
-      type: "text",
-      name: "ldap_attr_phone",
-      title: _setup.t("user_ldap", "User profile Phone will be set from the specified attribute"),
-      "data-default": _setup.ldapConfigStore.defaultLdapConfig.ldapAttrPhone
-    }
-  })]), _vm._v(" "), _c("p", [_c("label", {
-    attrs: {
-      for: "ldap_attr_website"
-    }
-  }, [_vm._v(" " + _vm._s(_setup.t("user_ldap", "Website Field")))]), _vm._v(" "), _c("input", {
-    attrs: {
-      id: "ldap_attr_website",
-      type: "text",
-      name: "ldap_attr_website",
-      title: _setup.t("user_ldap", "User profile Website will be set from the specified attribute"),
-      "data-default": _setup.ldapConfigStore.defaultLdapConfig.ldapAttrWebsite
-    }
-  })]), _vm._v(" "), _c("p", [_c("label", {
-    attrs: {
-      for: "ldap_attr_address"
-    }
-  }, [_vm._v(" " + _vm._s(_setup.t("user_ldap", "Address Field")))]), _vm._v(" "), _c("input", {
-    attrs: {
-      id: "ldap_attr_address",
-      type: "text",
-      name: "ldap_attr_address",
-      title: _setup.t("user_ldap", "User profile Address will be set from the specified attribute"),
-      "data-default": _setup.ldapConfigStore.defaultLdapConfig.ldapAttrAddress
-    }
-  })]), _vm._v(" "), _c("p", [_c("label", {
-    attrs: {
-      for: "ldap_attr_twitter"
-    }
-  }, [_vm._v(" " + _vm._s(_setup.t("user_ldap", "Twitter Field")))]), _vm._v(" "), _c("input", {
-    attrs: {
-      id: "ldap_attr_twitter",
-      type: "text",
-      name: "ldap_attr_twitter",
-      title: _setup.t("user_ldap", "User profile Twitter will be set from the specified attribute"),
-      "data-default": _setup.ldapConfigStore.defaultLdapConfig.ldapAttrTwitter
-    }
-  })]), _vm._v(" "), _c("p", [_c("label", {
-    attrs: {
-      for: "ldap_attr_fediverse"
-    }
-  }, [_vm._v(" " + _vm._s(_setup.t("user_ldap", "Fediverse Field")))]), _vm._v(" "), _c("input", {
-    attrs: {
-      id: "ldap_attr_fediverse",
-      type: "text",
-      name: "ldap_attr_fediverse",
-      title: _setup.t("user_ldap", "User profile Fediverse will be set from the specified attribute"),
-      "data-default": _setup.ldapConfigStore.defaultLdapConfig.ldapAttrFediverse
-    }
-  })]), _vm._v(" "), _c("p", [_c("label", {
-    attrs: {
-      for: "ldap_attr_organisation"
-    }
-  }, [_vm._v(" " + _vm._s(_setup.t("user_ldap", "Organisation Field")))]), _vm._v(" "), _c("input", {
-    attrs: {
-      id: "ldap_attr_organisation",
-      type: "text",
-      name: "ldap_attr_organisation",
-      title: _setup.t("user_ldap", "User profile Organisation will be set from the specified attribute"),
-      "data-default": _setup.ldapConfigStore.defaultLdapConfig.ldapAttrOrganisation
-    }
-  })]), _vm._v(" "), _c("p", [_c("label", {
-    attrs: {
-      for: "ldap_attr_role"
-    }
-  }, [_vm._v(" " + _vm._s(_setup.t("user_ldap", "Role Field")))]), _vm._v(" "), _c("input", {
-    attrs: {
-      id: "ldap_attr_role",
-      type: "text",
-      name: "ldap_attr_role",
-      title: _setup.t("user_ldap", "User profile Role will be set from the specified attribute"),
-      "data-default": _setup.ldapConfigStore.defaultLdapConfig.ldapAttrRole
-    }
-  })]), _vm._v(" "), _c("p", [_c("label", {
-    attrs: {
-      for: "ldap_attr_headline"
-    }
-  }, [_vm._v(" " + _vm._s(_setup.t("user_ldap", "Headline Field")))]), _vm._v(" "), _c("input", {
-    attrs: {
-      id: "ldap_attr_headline",
-      type: "text",
-      name: "ldap_attr_headline",
-      title: _setup.t("user_ldap", "User profile Headline will be set from the specified attribute"),
-      "data-default": _setup.ldapConfigStore.defaultLdapConfig.ldapAttrHeadline
-    }
-  })]), _vm._v(" "), _c("p", [_c("label", {
-    attrs: {
-      for: "ldap_attr_biography"
-    }
-  }, [_vm._v(" " + _vm._s(_setup.t("user_ldap", "Biography Field")))]), _vm._v(" "), _c("input", {
-    attrs: {
-      id: "ldap_attr_biography",
-      type: "text",
-      name: "ldap_attr_biography",
-      title: _setup.t("user_ldap", "User profile Biography will be set from the specified attribute"),
-      "data-default": _setup.ldapConfigStore.defaultLdapConfig.ldapAttrBiography
-    }
-  })]), _vm._v(" "), _c("p", [_c("label", {
-    attrs: {
-      for: "ldap_attr_birthdate"
-    }
-  }, [_vm._v(" " + _vm._s(_setup.t("user_ldap", "Birthdate Field")))]), _vm._v(" "), _c("input", {
-    attrs: {
-      id: "ldap_attr_birthdate",
-      type: "text",
-      name: "ldap_attr_birthdate",
-      title: _setup.t("user_ldap", "User profile Date of birth will be set from the specified attribute"),
-      "data-default": _setup.ldapConfigStore.defaultLdapConfig.ldapAttrBirthdate
-    }
-  })])])]), _vm._v(" "), _vm._v("\n\t" + _vm._s(_setup.settingControls) + "\n")]);
+  }, [_vm._v("\n\t\t\t" + _vm._s(_setup.t("user_ldap", "Clear Groupname-LDAP Group Mapping")) + "\n\t\t")])], 1)]);
 };
 var staticRenderFns = [];
 render._withStripped = true;
@@ -1488,11 +1250,11 @@ var render = function render() {
       multiple: true
     },
     model: {
-      value: _setup.ldapConfig.ldapGroupFilterObjectClass,
+      value: _setup.ldapConfig.ldapGroupFilterObjectclass,
       callback: function ($$v) {
-        _vm.$set(_setup.ldapConfig, "ldapGroupFilterObjectClass", $$v);
+        _vm.$set(_setup.ldapConfig, "ldapGroupFilterObjectclass", $$v);
       },
-      expression: "ldapConfig.ldapGroupFilterObjectClass"
+      expression: "ldapConfig.ldapGroupFilterObjectclass"
     }
   }), _vm._v(" "), _c(_setup.NcSelect, {
     staticClass: "ldap-wizard__groups__group-filter-groups__select",
@@ -1503,15 +1265,24 @@ var render = function render() {
       multiple: true
     },
     model: {
-      value: _setup.ldapConfig.ldapGroupFilterObjectClass,
+      value: _setup.ldapConfig.ldapGroupFilterObjectclass,
       callback: function ($$v) {
-        _vm.$set(_setup.ldapConfig, "ldapGroupFilterObjectClass", $$v);
+        _vm.$set(_setup.ldapConfig, "ldapGroupFilterObjectclass", $$v);
       },
-      expression: "ldapConfig.ldapGroupFilterObjectClass"
+      expression: "ldapConfig.ldapGroupFilterObjectclass"
     }
   })], 1), _vm._v(" "), _c("div", {
     staticClass: "ldap-wizard__groups__line"
-  }, [_vm._m(0), _vm._v(" "), _c("p", {
+  }, [_c("p", {
+    staticClass: "ldapManyGroupsSupport hidden"
+  }, [_c("select", {
+    staticClass: "ldapGroupList ldapGroupListAvailable",
+    attrs: {
+      multiple: true,
+      "aria-describedby": "ldapGroupListAvailable_instructions",
+      title: "t('user_ldap', 'Available groups')"
+    }
+  })]), _vm._v(" "), _c("p", {
     staticClass: "hidden-visually",
     attrs: {
       id: "ldapGroupListAvailable_instructions"
@@ -1523,7 +1294,7 @@ var render = function render() {
   }, [_vm._v("<")])], 1), _vm._v(" "), _c("select", {
     staticClass: "ldapGroupList ldapGroupListSelected",
     attrs: {
-      multiple: "multiple",
+      multiple: true,
       "aria-describedby": "ldapGroupListSelected_instructions",
       title: "t('user_ldap', 'Selected groups')"
     }
@@ -1543,9 +1314,9 @@ var render = function render() {
         _setup.editGroupsFilter = $event;
       }
     }
-  }, [_vm._v("\n\t\t\t" + _vm._s(_setup.t("user_name", "Edit LDAP Query")) + "\n\t\t")]), _vm._v(" "), !_setup.editGroupsFilter ? _c("div", [_c("label", [_vm._v(_vm._s(_setup.t("user_name", "LDAP Filter:")))]), _vm._v(" "), _c("span", [_vm._v(_vm._s(_setup.ldapConfig.ldapGroupsListFilter))])]) : _c("div", [_c(_setup.NcTextArea, {
+  }, [_vm._v("\n\t\t\t" + _vm._s(_setup.t("user_name", "Edit LDAP Query")) + "\n\t\t")]), _vm._v(" "), !_setup.editGroupsFilter ? _c("div", [_c("label", [_vm._v(_vm._s(_setup.t("user_name", "LDAP Filter:")))]), _vm._v(" "), _c("span", [_vm._v(_vm._s(_setup.ldapConfig.ldapGroupFilter))])]) : _c("div", [_c(_setup.NcTextArea, {
     attrs: {
-      value: _setup.ldapConfig.ldapGroupListFilter,
+      value: _setup.ldapConfig.ldapGroupFilter,
       placeholder: _setup.t("user_name", "Edit LDAP Query"),
       "helper-text": _setup.t("user_name", "The filter specifies which LDAP groups shall have access to the {instanceName} instance.", {
         instanceName: _setup.instanceName
@@ -1553,7 +1324,7 @@ var render = function render() {
     },
     on: {
       "update:value": function ($event) {
-        return _vm.$set(_setup.ldapConfig, "ldapGroupListFilter", $event);
+        return _vm.$set(_setup.ldapConfig, "ldapGroupFilter", $event);
       }
     }
   })], 1)], 1), _vm._v(" "), _c("div", {
@@ -1566,21 +1337,7 @@ var render = function render() {
     groupsCount: _setup.groupsCount
   })))]) : _vm._e()], 1)]);
 };
-var staticRenderFns = [function () {
-  var _vm = this,
-    _c = _vm._self._c,
-    _setup = _vm._self._setupProxy;
-  return _c("p", {
-    staticClass: "ldapManyGroupsSupport hidden"
-  }, [_c("select", {
-    staticClass: "ldapGroupList ldapGroupListAvailable",
-    attrs: {
-      multiple: "multiple",
-      "aria-describedby": "ldapGroupListAvailable_instructions",
-      title: "t('user_ldap', 'Available groups')"
-    }
-  })]);
-}];
+var staticRenderFns = [];
 render._withStripped = true;
 
 
@@ -1609,22 +1366,22 @@ var render = function render() {
     staticClass: "ldap-wizard__login__line ldap-wizard__login__login-attributes"
   }, [_c(_setup.NcCheckboxRadioSwitch, {
     attrs: {
-      checked: _setup.ldapConfig.ldapUsername,
+      checked: _setup.ldapConfig.ldapAgentName,
       "aria-label": _setup.t("user_ldap", "Allows login against the LDAP/AD username, which is either `uid` or `sAMAccountName` and will be detected.")
     },
     on: {
       "update:checked": function ($event) {
-        return _vm.$set(_setup.ldapConfig, "ldapUsername", $event);
+        return _vm.$set(_setup.ldapConfig, "ldapAgentName", $event);
       }
     }
   }, [_vm._v("\n\t\t\t" + _vm._s(_setup.t("user_ldap", "LDAP/AD Username")) + "\n\t\t")]), _vm._v(" "), _c(_setup.NcCheckboxRadioSwitch, {
     attrs: {
-      checked: _setup.ldapConfig.ldapEmail,
+      checked: _setup.ldapConfig.ldapLoginFilterEmail,
       "aria-label": _setup.t("user_ldap", "Allows login against an email attribute. `mail` and `mailPrimaryAddress` allowed.")
     },
     on: {
       "update:checked": function ($event) {
-        return _vm.$set(_setup.ldapConfig, "ldapEmail", $event);
+        return _vm.$set(_setup.ldapConfig, "ldapLoginFilterEmail", $event);
       }
     }
   }, [_vm._v("\n\t\t\t" + _vm._s(_setup.t("user_ldap", "LDAP/AD Email Address")) + "\n\t\t")]), _vm._v(" "), _c(_setup.NcSelect, {
@@ -1651,15 +1408,15 @@ var render = function render() {
         _setup.editUserLoginFilter = $event;
       }
     }
-  }, [_vm._v("\n\t\t\t" + _vm._s(_setup.t("user_name", "Edit LDAP Query")) + "\n\t\t")]), _vm._v(" "), !_setup.editUserLoginFilter ? _c("div", [_c("label", [_vm._v(_vm._s(_setup.t("user_name", "LDAP Filter:")))]), _vm._v(" "), _c("span", [_vm._v(_vm._s(_setup.ldapConfig.ldapUserLoginFilter))])]) : _c("div", [_c(_setup.NcTextArea, {
+  }, [_vm._v("\n\t\t\t" + _vm._s(_setup.t("user_name", "Edit LDAP Query")) + "\n\t\t")]), _vm._v(" "), !_setup.editUserLoginFilter ? _c("div", [_c("label", [_vm._v(_vm._s(_setup.t("user_name", "LDAP Filter:")))]), _vm._v(" "), _c("span", [_vm._v(_vm._s(_setup.ldapConfig.ldapLoginFilter))])]) : _c("div", [_c(_setup.NcTextArea, {
     attrs: {
-      value: _setup.ldapConfig.ldapUserLoginFilter,
+      value: _setup.ldapConfig.ldapLoginFilter,
       placeholder: _setup.t("user_name", "Edit LDAP Query"),
       "helper-text": _setup.t("user_name", "Defines the filter to apply, when login is attempted. `%%uid` replaces the username in the login action. Example: `uid=%%uid`")
     },
     on: {
       "update:value": function ($event) {
-        return _vm.$set(_setup.ldapConfig, "ldapUserLoginFilter", $event);
+        return _vm.$set(_setup.ldapConfig, "ldapLoginFilter", $event);
       }
     }
   })], 1)], 1), _vm._v(" "), _c("div", {
@@ -1809,9 +1566,7 @@ var render = function render() {
     }
   }), _vm._v(" "), _c(_setup.NcButton, {
     on: {
-      click: function ($event) {
-        return _setup.ldapConfigStore.create(_setup.ldapConfig);
-      }
+      click: _setup.ldapConfigStore.create
     }
   }, [_vm._v("\n\t\t\t" + _vm._s(_setup.t("user_ldap", "Save Credentials")) + "\n\t\t")])], 1), _vm._v(" "), _c("div", {
     staticClass: "ldap-wizard__server__line"
@@ -1889,7 +1644,7 @@ var render = function render() {
       },
       expression: "ldapConfig.ldapUserFilterObjectclass"
     }
-  }), _vm._v("\n\t\t" + _vm._s(_setup.t("user_name", "The most common object classes for users are organizationalPerson, person, user, and inetOrgPerson. If you are not sure which object class to select, please consult your directory admin.")))], 1), _vm._v(" "), _c("div", {
+  }), _vm._v("\n\t\t" + _vm._s(_setup.t("user_name", "The most common object classes for users are organizationalPerson, person, user, and inetOrgPerson. If you are not sure which object class to select, please consult your directory admin.")) + "\n\t")], 1), _vm._v(" "), _c("div", {
     staticClass: "ldap-wizard__users__line ldap-wizard__users__user-filter-groups"
   }, [_c("div", [_vm._v("\n\t\t\t" + _vm._s(_setup.t("user_name", "Only from these groups:")) + "\n\t\t")]), _vm._v(" "), _c(_setup.NcSelect, {
     staticClass: "ldap-wizard__users__user-filter-groups__select",
@@ -1913,7 +1668,7 @@ var render = function render() {
   }, [_c("select", {
     staticClass: "ldapGroupList ldapGroupListAvailable",
     attrs: {
-      multiple: "multiple",
+      multiple: true,
       "aria-describedby": "ldapGroupListAvailable_instructions",
       title: _setup.t("user_name", "Available groups")
     }
@@ -1929,7 +1684,7 @@ var render = function render() {
   }, [_vm._v("<")])], 1), _vm._v(" "), _c("select", {
     staticClass: "ldapGroupList ldapGroupListSelected",
     attrs: {
-      multiple: "multiple",
+      multiple: true,
       "aria-describedby": "ldapGroupListSelected_instructions",
       title: _setup.t("user_name", "Selected groups")
     }
@@ -1949,9 +1704,9 @@ var render = function render() {
         _setup.editUserFilter = $event;
       }
     }
-  }, [_vm._v("\n\t\t\t" + _vm._s(_setup.t("user_name", "Edit LDAP Query")) + "\n\t\t")]), _vm._v(" "), !_setup.editUserFilter ? _c("div", [_c("label", [_vm._v(_vm._s(_setup.t("user_name", "LDAP Filter:")))]), _vm._v(" "), _c("span", [_vm._v(_vm._s(_setup.ldapConfig.ldapUserListFilter))])]) : _c("div", [_c(_setup.NcTextArea, {
+  }, [_vm._v("\n\t\t\t" + _vm._s(_setup.t("user_name", "Edit LDAP Query")) + "\n\t\t")]), _vm._v(" "), !_setup.editUserFilter ? _c("div", [_c("label", [_vm._v(_vm._s(_setup.t("user_name", "LDAP Filter:")))]), _vm._v(" "), _c("span", [_vm._v(_vm._s(_setup.ldapConfig.ldapUserFilter))])]) : _c("div", [_c(_setup.NcTextArea, {
     attrs: {
-      value: _setup.ldapConfig.ldapUserListFilter,
+      value: _setup.ldapConfig.ldapUserFilter,
       placeholder: _setup.t("user_name", "Edit LDAP Query"),
       "helper-text": _setup.t("user_name", "The filter specifies which LDAP users shall have access to the {instanceName} instance.", {
         instanceName: _setup.instanceName
@@ -1959,7 +1714,7 @@ var render = function render() {
     },
     on: {
       "update:value": function ($event) {
-        return _vm.$set(_setup.ldapConfig, "ldapUserListFilter", $event);
+        return _vm.$set(_setup.ldapConfig, "ldapUserFilter", $event);
       }
     }
   })], 1)], 1), _vm._v(" "), _c("div", {
@@ -2092,7 +1847,7 @@ var render = function render() {
     }, [_vm._v("\n\t\t\t\t\t" + _vm._s(tabLabel) + "\n\t\t\t\t")]);
   }), 1)]), _vm._v(" "), !_setup.ldapModuleInstalled ? _c("div", {
     staticClass: "ldapwarning"
-  }, [_vm._v("\n\t\t\t{{ t('user_ldap', '"), _c("b", [_vm._v("Warning:")]), _vm._v(" The PHP LDAP module is not installed, the backend will not work. Please ask your system administrator to install it.') }}\n\t\t")]) : _vm._e(), _vm._v(" "), _setup.selectedTab === "server" ? _c(_setup.ServerTab, {
+  }, [_vm._v("\n\t\t\t{{ t('user_ldap', '"), _c("b", [_vm._v("Warning:")]), _vm._v("') }}\n\t\t\t" + _vm._s(_setup.t("user_ldap", "The PHP LDAP module is not installed, the backend will not work. Please ask your system administrator to install it.")) + "\n\t\t")]) : _vm._e(), _vm._v(" "), _setup.selectedTab === "server" ? _c(_setup.ServerTab, {
     attrs: {
       "ldap-config-id": _setup.selectedConfigId
     }
@@ -2125,6 +1880,77 @@ var render = function render() {
 };
 var staticRenderFns = [];
 render._withStripped = true;
+
+
+/***/ }),
+
+/***/ "./node_modules/css-loader/dist/cjs.js!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/sass-loader/dist/cjs.js!./node_modules/vue-loader/lib/index.js??vue-loader-options!./apps/user_ldap/src/components/SettingsTabs/AdvancedTab.vue?vue&type=style&index=0&id=63fd50b0&lang=scss&scoped=true":
+/*!******************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/css-loader/dist/cjs.js!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/sass-loader/dist/cjs.js!./node_modules/vue-loader/lib/index.js??vue-loader-options!./apps/user_ldap/src/components/SettingsTabs/AdvancedTab.vue?vue&type=style&index=0&id=63fd50b0&lang=scss&scoped=true ***!
+  \******************************************************************************************************************************************************************************************************************************************************************************************************************************/
+/***/ ((module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _node_modules_css_loader_dist_runtime_noSourceMaps_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../../../../node_modules/css-loader/dist/runtime/noSourceMaps.js */ "./node_modules/css-loader/dist/runtime/noSourceMaps.js");
+/* harmony import */ var _node_modules_css_loader_dist_runtime_noSourceMaps_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_css_loader_dist_runtime_noSourceMaps_js__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../../../../node_modules/css-loader/dist/runtime/api.js */ "./node_modules/css-loader/dist/runtime/api.js");
+/* harmony import */ var _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1__);
+// Imports
+
+
+var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1___default()((_node_modules_css_loader_dist_runtime_noSourceMaps_js__WEBPACK_IMPORTED_MODULE_0___default()));
+// Module
+___CSS_LOADER_EXPORT___.push([module.id, `.ldap-wizard__advanced[data-v-63fd50b0] {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+.ldap-wizard__advanced__section[data-v-63fd50b0] {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}`, ""]);
+// Exports
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
+
+
+/***/ }),
+
+/***/ "./node_modules/css-loader/dist/cjs.js!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/sass-loader/dist/cjs.js!./node_modules/vue-loader/lib/index.js??vue-loader-options!./apps/user_ldap/src/components/SettingsTabs/ExpertTab.vue?vue&type=style&index=0&id=47a98ee8&lang=scss&scoped=true":
+/*!****************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/css-loader/dist/cjs.js!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/sass-loader/dist/cjs.js!./node_modules/vue-loader/lib/index.js??vue-loader-options!./apps/user_ldap/src/components/SettingsTabs/ExpertTab.vue?vue&type=style&index=0&id=47a98ee8&lang=scss&scoped=true ***!
+  \****************************************************************************************************************************************************************************************************************************************************************************************************************************/
+/***/ ((module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _node_modules_css_loader_dist_runtime_noSourceMaps_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../../../../node_modules/css-loader/dist/runtime/noSourceMaps.js */ "./node_modules/css-loader/dist/runtime/noSourceMaps.js");
+/* harmony import */ var _node_modules_css_loader_dist_runtime_noSourceMaps_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_css_loader_dist_runtime_noSourceMaps_js__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../../../../node_modules/css-loader/dist/runtime/api.js */ "./node_modules/css-loader/dist/runtime/api.js");
+/* harmony import */ var _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1__);
+// Imports
+
+
+var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1___default()((_node_modules_css_loader_dist_runtime_noSourceMaps_js__WEBPACK_IMPORTED_MODULE_0___default()));
+// Module
+___CSS_LOADER_EXPORT___.push([module.id, `.ldap-wizard__expert[data-v-47a98ee8] {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+.ldap-wizard__expert__line[data-v-47a98ee8] {
+  display: flex;
+  flex-direction: column;
+  padding-left: 32px;
+  gap: 4px;
+}`, ""]);
+// Exports
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
 
 /***/ }),
@@ -2374,6 +2200,114 @@ ___CSS_LOADER_EXPORT___.push([module.id, `.ldap-wizard[data-v-91565fbc] {
 }`, ""]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
+
+
+/***/ }),
+
+/***/ "./node_modules/style-loader/dist/cjs.js!./node_modules/css-loader/dist/cjs.js!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/sass-loader/dist/cjs.js!./node_modules/vue-loader/lib/index.js??vue-loader-options!./apps/user_ldap/src/components/SettingsTabs/AdvancedTab.vue?vue&type=style&index=0&id=63fd50b0&lang=scss&scoped=true":
+/*!**********************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/style-loader/dist/cjs.js!./node_modules/css-loader/dist/cjs.js!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/sass-loader/dist/cjs.js!./node_modules/vue-loader/lib/index.js??vue-loader-options!./apps/user_ldap/src/components/SettingsTabs/AdvancedTab.vue?vue&type=style&index=0&id=63fd50b0&lang=scss&scoped=true ***!
+  \**********************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! !../../../../../node_modules/style-loader/dist/runtime/injectStylesIntoStyleTag.js */ "./node_modules/style-loader/dist/runtime/injectStylesIntoStyleTag.js");
+/* harmony import */ var _node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _node_modules_style_loader_dist_runtime_styleDomAPI_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! !../../../../../node_modules/style-loader/dist/runtime/styleDomAPI.js */ "./node_modules/style-loader/dist/runtime/styleDomAPI.js");
+/* harmony import */ var _node_modules_style_loader_dist_runtime_styleDomAPI_js__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_node_modules_style_loader_dist_runtime_styleDomAPI_js__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _node_modules_style_loader_dist_runtime_insertBySelector_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! !../../../../../node_modules/style-loader/dist/runtime/insertBySelector.js */ "./node_modules/style-loader/dist/runtime/insertBySelector.js");
+/* harmony import */ var _node_modules_style_loader_dist_runtime_insertBySelector_js__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_node_modules_style_loader_dist_runtime_insertBySelector_js__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var _node_modules_style_loader_dist_runtime_setAttributesWithoutAttributes_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! !../../../../../node_modules/style-loader/dist/runtime/setAttributesWithoutAttributes.js */ "./node_modules/style-loader/dist/runtime/setAttributesWithoutAttributes.js");
+/* harmony import */ var _node_modules_style_loader_dist_runtime_setAttributesWithoutAttributes_js__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(_node_modules_style_loader_dist_runtime_setAttributesWithoutAttributes_js__WEBPACK_IMPORTED_MODULE_3__);
+/* harmony import */ var _node_modules_style_loader_dist_runtime_insertStyleElement_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! !../../../../../node_modules/style-loader/dist/runtime/insertStyleElement.js */ "./node_modules/style-loader/dist/runtime/insertStyleElement.js");
+/* harmony import */ var _node_modules_style_loader_dist_runtime_insertStyleElement_js__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(_node_modules_style_loader_dist_runtime_insertStyleElement_js__WEBPACK_IMPORTED_MODULE_4__);
+/* harmony import */ var _node_modules_style_loader_dist_runtime_styleTagTransform_js__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! !../../../../../node_modules/style-loader/dist/runtime/styleTagTransform.js */ "./node_modules/style-loader/dist/runtime/styleTagTransform.js");
+/* harmony import */ var _node_modules_style_loader_dist_runtime_styleTagTransform_js__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(_node_modules_style_loader_dist_runtime_styleTagTransform_js__WEBPACK_IMPORTED_MODULE_5__);
+/* harmony import */ var _node_modules_css_loader_dist_cjs_js_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_sass_loader_dist_cjs_js_node_modules_vue_loader_lib_index_js_vue_loader_options_AdvancedTab_vue_vue_type_style_index_0_id_63fd50b0_lang_scss_scoped_true__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! !!../../../../../node_modules/css-loader/dist/cjs.js!../../../../../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../../../../../node_modules/sass-loader/dist/cjs.js!../../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./AdvancedTab.vue?vue&type=style&index=0&id=63fd50b0&lang=scss&scoped=true */ "./node_modules/css-loader/dist/cjs.js!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/sass-loader/dist/cjs.js!./node_modules/vue-loader/lib/index.js??vue-loader-options!./apps/user_ldap/src/components/SettingsTabs/AdvancedTab.vue?vue&type=style&index=0&id=63fd50b0&lang=scss&scoped=true");
+
+      
+      
+      
+      
+      
+      
+      
+      
+      
+
+var options = {};
+
+options.styleTagTransform = (_node_modules_style_loader_dist_runtime_styleTagTransform_js__WEBPACK_IMPORTED_MODULE_5___default());
+options.setAttributes = (_node_modules_style_loader_dist_runtime_setAttributesWithoutAttributes_js__WEBPACK_IMPORTED_MODULE_3___default());
+
+      options.insert = _node_modules_style_loader_dist_runtime_insertBySelector_js__WEBPACK_IMPORTED_MODULE_2___default().bind(null, "head");
+    
+options.domAPI = (_node_modules_style_loader_dist_runtime_styleDomAPI_js__WEBPACK_IMPORTED_MODULE_1___default());
+options.insertStyleElement = (_node_modules_style_loader_dist_runtime_insertStyleElement_js__WEBPACK_IMPORTED_MODULE_4___default());
+
+var update = _node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0___default()(_node_modules_css_loader_dist_cjs_js_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_sass_loader_dist_cjs_js_node_modules_vue_loader_lib_index_js_vue_loader_options_AdvancedTab_vue_vue_type_style_index_0_id_63fd50b0_lang_scss_scoped_true__WEBPACK_IMPORTED_MODULE_6__["default"], options);
+
+
+
+
+       /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_css_loader_dist_cjs_js_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_sass_loader_dist_cjs_js_node_modules_vue_loader_lib_index_js_vue_loader_options_AdvancedTab_vue_vue_type_style_index_0_id_63fd50b0_lang_scss_scoped_true__WEBPACK_IMPORTED_MODULE_6__["default"] && _node_modules_css_loader_dist_cjs_js_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_sass_loader_dist_cjs_js_node_modules_vue_loader_lib_index_js_vue_loader_options_AdvancedTab_vue_vue_type_style_index_0_id_63fd50b0_lang_scss_scoped_true__WEBPACK_IMPORTED_MODULE_6__["default"].locals ? _node_modules_css_loader_dist_cjs_js_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_sass_loader_dist_cjs_js_node_modules_vue_loader_lib_index_js_vue_loader_options_AdvancedTab_vue_vue_type_style_index_0_id_63fd50b0_lang_scss_scoped_true__WEBPACK_IMPORTED_MODULE_6__["default"].locals : undefined);
+
+
+/***/ }),
+
+/***/ "./node_modules/style-loader/dist/cjs.js!./node_modules/css-loader/dist/cjs.js!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/sass-loader/dist/cjs.js!./node_modules/vue-loader/lib/index.js??vue-loader-options!./apps/user_ldap/src/components/SettingsTabs/ExpertTab.vue?vue&type=style&index=0&id=47a98ee8&lang=scss&scoped=true":
+/*!********************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/style-loader/dist/cjs.js!./node_modules/css-loader/dist/cjs.js!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/sass-loader/dist/cjs.js!./node_modules/vue-loader/lib/index.js??vue-loader-options!./apps/user_ldap/src/components/SettingsTabs/ExpertTab.vue?vue&type=style&index=0&id=47a98ee8&lang=scss&scoped=true ***!
+  \********************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! !../../../../../node_modules/style-loader/dist/runtime/injectStylesIntoStyleTag.js */ "./node_modules/style-loader/dist/runtime/injectStylesIntoStyleTag.js");
+/* harmony import */ var _node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _node_modules_style_loader_dist_runtime_styleDomAPI_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! !../../../../../node_modules/style-loader/dist/runtime/styleDomAPI.js */ "./node_modules/style-loader/dist/runtime/styleDomAPI.js");
+/* harmony import */ var _node_modules_style_loader_dist_runtime_styleDomAPI_js__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_node_modules_style_loader_dist_runtime_styleDomAPI_js__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _node_modules_style_loader_dist_runtime_insertBySelector_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! !../../../../../node_modules/style-loader/dist/runtime/insertBySelector.js */ "./node_modules/style-loader/dist/runtime/insertBySelector.js");
+/* harmony import */ var _node_modules_style_loader_dist_runtime_insertBySelector_js__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_node_modules_style_loader_dist_runtime_insertBySelector_js__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var _node_modules_style_loader_dist_runtime_setAttributesWithoutAttributes_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! !../../../../../node_modules/style-loader/dist/runtime/setAttributesWithoutAttributes.js */ "./node_modules/style-loader/dist/runtime/setAttributesWithoutAttributes.js");
+/* harmony import */ var _node_modules_style_loader_dist_runtime_setAttributesWithoutAttributes_js__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(_node_modules_style_loader_dist_runtime_setAttributesWithoutAttributes_js__WEBPACK_IMPORTED_MODULE_3__);
+/* harmony import */ var _node_modules_style_loader_dist_runtime_insertStyleElement_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! !../../../../../node_modules/style-loader/dist/runtime/insertStyleElement.js */ "./node_modules/style-loader/dist/runtime/insertStyleElement.js");
+/* harmony import */ var _node_modules_style_loader_dist_runtime_insertStyleElement_js__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(_node_modules_style_loader_dist_runtime_insertStyleElement_js__WEBPACK_IMPORTED_MODULE_4__);
+/* harmony import */ var _node_modules_style_loader_dist_runtime_styleTagTransform_js__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! !../../../../../node_modules/style-loader/dist/runtime/styleTagTransform.js */ "./node_modules/style-loader/dist/runtime/styleTagTransform.js");
+/* harmony import */ var _node_modules_style_loader_dist_runtime_styleTagTransform_js__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(_node_modules_style_loader_dist_runtime_styleTagTransform_js__WEBPACK_IMPORTED_MODULE_5__);
+/* harmony import */ var _node_modules_css_loader_dist_cjs_js_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_sass_loader_dist_cjs_js_node_modules_vue_loader_lib_index_js_vue_loader_options_ExpertTab_vue_vue_type_style_index_0_id_47a98ee8_lang_scss_scoped_true__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! !!../../../../../node_modules/css-loader/dist/cjs.js!../../../../../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../../../../../node_modules/sass-loader/dist/cjs.js!../../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./ExpertTab.vue?vue&type=style&index=0&id=47a98ee8&lang=scss&scoped=true */ "./node_modules/css-loader/dist/cjs.js!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/sass-loader/dist/cjs.js!./node_modules/vue-loader/lib/index.js??vue-loader-options!./apps/user_ldap/src/components/SettingsTabs/ExpertTab.vue?vue&type=style&index=0&id=47a98ee8&lang=scss&scoped=true");
+
+      
+      
+      
+      
+      
+      
+      
+      
+      
+
+var options = {};
+
+options.styleTagTransform = (_node_modules_style_loader_dist_runtime_styleTagTransform_js__WEBPACK_IMPORTED_MODULE_5___default());
+options.setAttributes = (_node_modules_style_loader_dist_runtime_setAttributesWithoutAttributes_js__WEBPACK_IMPORTED_MODULE_3___default());
+
+      options.insert = _node_modules_style_loader_dist_runtime_insertBySelector_js__WEBPACK_IMPORTED_MODULE_2___default().bind(null, "head");
+    
+options.domAPI = (_node_modules_style_loader_dist_runtime_styleDomAPI_js__WEBPACK_IMPORTED_MODULE_1___default());
+options.insertStyleElement = (_node_modules_style_loader_dist_runtime_insertStyleElement_js__WEBPACK_IMPORTED_MODULE_4___default());
+
+var update = _node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0___default()(_node_modules_css_loader_dist_cjs_js_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_sass_loader_dist_cjs_js_node_modules_vue_loader_lib_index_js_vue_loader_options_ExpertTab_vue_vue_type_style_index_0_id_47a98ee8_lang_scss_scoped_true__WEBPACK_IMPORTED_MODULE_6__["default"], options);
+
+
+
+
+       /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_css_loader_dist_cjs_js_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_sass_loader_dist_cjs_js_node_modules_vue_loader_lib_index_js_vue_loader_options_ExpertTab_vue_vue_type_style_index_0_id_47a98ee8_lang_scss_scoped_true__WEBPACK_IMPORTED_MODULE_6__["default"] && _node_modules_css_loader_dist_cjs_js_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_sass_loader_dist_cjs_js_node_modules_vue_loader_lib_index_js_vue_loader_options_ExpertTab_vue_vue_type_style_index_0_id_47a98ee8_lang_scss_scoped_true__WEBPACK_IMPORTED_MODULE_6__["default"].locals ? _node_modules_css_loader_dist_cjs_js_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_sass_loader_dist_cjs_js_node_modules_vue_loader_lib_index_js_vue_loader_options_ExpertTab_vue_vue_type_style_index_0_id_47a98ee8_lang_scss_scoped_true__WEBPACK_IMPORTED_MODULE_6__["default"].locals : undefined);
 
 
 /***/ }),
@@ -2696,23 +2630,25 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
-/* harmony import */ var _AdvancedTab_vue_vue_type_template_id_63fd50b0__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./AdvancedTab.vue?vue&type=template&id=63fd50b0 */ "./apps/user_ldap/src/components/SettingsTabs/AdvancedTab.vue?vue&type=template&id=63fd50b0");
+/* harmony import */ var _AdvancedTab_vue_vue_type_template_id_63fd50b0_scoped_true__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./AdvancedTab.vue?vue&type=template&id=63fd50b0&scoped=true */ "./apps/user_ldap/src/components/SettingsTabs/AdvancedTab.vue?vue&type=template&id=63fd50b0&scoped=true");
 /* harmony import */ var _AdvancedTab_vue_vue_type_script_lang_ts_setup_true__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./AdvancedTab.vue?vue&type=script&lang=ts&setup=true */ "./apps/user_ldap/src/components/SettingsTabs/AdvancedTab.vue?vue&type=script&lang=ts&setup=true");
-/* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! !../../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+/* harmony import */ var _AdvancedTab_vue_vue_type_style_index_0_id_63fd50b0_lang_scss_scoped_true__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./AdvancedTab.vue?vue&type=style&index=0&id=63fd50b0&lang=scss&scoped=true */ "./apps/user_ldap/src/components/SettingsTabs/AdvancedTab.vue?vue&type=style&index=0&id=63fd50b0&lang=scss&scoped=true");
+/* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! !../../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
 
 
 
+;
 
 
 /* normalize component */
-;
-var component = (0,_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__["default"])(
+
+var component = (0,_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_3__["default"])(
   _AdvancedTab_vue_vue_type_script_lang_ts_setup_true__WEBPACK_IMPORTED_MODULE_1__["default"],
-  _AdvancedTab_vue_vue_type_template_id_63fd50b0__WEBPACK_IMPORTED_MODULE_0__.render,
-  _AdvancedTab_vue_vue_type_template_id_63fd50b0__WEBPACK_IMPORTED_MODULE_0__.staticRenderFns,
+  _AdvancedTab_vue_vue_type_template_id_63fd50b0_scoped_true__WEBPACK_IMPORTED_MODULE_0__.render,
+  _AdvancedTab_vue_vue_type_template_id_63fd50b0_scoped_true__WEBPACK_IMPORTED_MODULE_0__.staticRenderFns,
   false,
   null,
-  null,
+  "63fd50b0",
   null
   
 )
@@ -2734,23 +2670,25 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
-/* harmony import */ var _ExpertTab_vue_vue_type_template_id_47a98ee8__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./ExpertTab.vue?vue&type=template&id=47a98ee8 */ "./apps/user_ldap/src/components/SettingsTabs/ExpertTab.vue?vue&type=template&id=47a98ee8");
+/* harmony import */ var _ExpertTab_vue_vue_type_template_id_47a98ee8_scoped_true__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./ExpertTab.vue?vue&type=template&id=47a98ee8&scoped=true */ "./apps/user_ldap/src/components/SettingsTabs/ExpertTab.vue?vue&type=template&id=47a98ee8&scoped=true");
 /* harmony import */ var _ExpertTab_vue_vue_type_script_lang_ts_setup_true__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./ExpertTab.vue?vue&type=script&lang=ts&setup=true */ "./apps/user_ldap/src/components/SettingsTabs/ExpertTab.vue?vue&type=script&lang=ts&setup=true");
-/* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! !../../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+/* harmony import */ var _ExpertTab_vue_vue_type_style_index_0_id_47a98ee8_lang_scss_scoped_true__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./ExpertTab.vue?vue&type=style&index=0&id=47a98ee8&lang=scss&scoped=true */ "./apps/user_ldap/src/components/SettingsTabs/ExpertTab.vue?vue&type=style&index=0&id=47a98ee8&lang=scss&scoped=true");
+/* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! !../../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
 
 
 
+;
 
 
 /* normalize component */
-;
-var component = (0,_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__["default"])(
+
+var component = (0,_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_3__["default"])(
   _ExpertTab_vue_vue_type_script_lang_ts_setup_true__WEBPACK_IMPORTED_MODULE_1__["default"],
-  _ExpertTab_vue_vue_type_template_id_47a98ee8__WEBPACK_IMPORTED_MODULE_0__.render,
-  _ExpertTab_vue_vue_type_template_id_47a98ee8__WEBPACK_IMPORTED_MODULE_0__.staticRenderFns,
+  _ExpertTab_vue_vue_type_template_id_47a98ee8_scoped_true__WEBPACK_IMPORTED_MODULE_0__.render,
+  _ExpertTab_vue_vue_type_template_id_47a98ee8_scoped_true__WEBPACK_IMPORTED_MODULE_0__.staticRenderFns,
   false,
   null,
-  null,
+  "47a98ee8",
   null
   
 )
@@ -3151,34 +3089,34 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
-/***/ "./apps/user_ldap/src/components/SettingsTabs/AdvancedTab.vue?vue&type=template&id=63fd50b0":
-/*!**************************************************************************************************!*\
-  !*** ./apps/user_ldap/src/components/SettingsTabs/AdvancedTab.vue?vue&type=template&id=63fd50b0 ***!
-  \**************************************************************************************************/
+/***/ "./apps/user_ldap/src/components/SettingsTabs/AdvancedTab.vue?vue&type=template&id=63fd50b0&scoped=true":
+/*!**************************************************************************************************************!*\
+  !*** ./apps/user_ldap/src/components/SettingsTabs/AdvancedTab.vue?vue&type=template&id=63fd50b0&scoped=true ***!
+  \**************************************************************************************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   render: () => (/* reexport safe */ _node_modules_babel_loader_lib_index_js_node_modules_vue_loader_lib_loaders_templateLoader_js_ruleSet_1_rules_3_node_modules_vue_loader_lib_index_js_vue_loader_options_AdvancedTab_vue_vue_type_template_id_63fd50b0__WEBPACK_IMPORTED_MODULE_0__.render),
-/* harmony export */   staticRenderFns: () => (/* reexport safe */ _node_modules_babel_loader_lib_index_js_node_modules_vue_loader_lib_loaders_templateLoader_js_ruleSet_1_rules_3_node_modules_vue_loader_lib_index_js_vue_loader_options_AdvancedTab_vue_vue_type_template_id_63fd50b0__WEBPACK_IMPORTED_MODULE_0__.staticRenderFns)
+/* harmony export */   render: () => (/* reexport safe */ _node_modules_babel_loader_lib_index_js_node_modules_vue_loader_lib_loaders_templateLoader_js_ruleSet_1_rules_3_node_modules_vue_loader_lib_index_js_vue_loader_options_AdvancedTab_vue_vue_type_template_id_63fd50b0_scoped_true__WEBPACK_IMPORTED_MODULE_0__.render),
+/* harmony export */   staticRenderFns: () => (/* reexport safe */ _node_modules_babel_loader_lib_index_js_node_modules_vue_loader_lib_loaders_templateLoader_js_ruleSet_1_rules_3_node_modules_vue_loader_lib_index_js_vue_loader_options_AdvancedTab_vue_vue_type_template_id_63fd50b0_scoped_true__WEBPACK_IMPORTED_MODULE_0__.staticRenderFns)
 /* harmony export */ });
-/* harmony import */ var _node_modules_babel_loader_lib_index_js_node_modules_vue_loader_lib_loaders_templateLoader_js_ruleSet_1_rules_3_node_modules_vue_loader_lib_index_js_vue_loader_options_AdvancedTab_vue_vue_type_template_id_63fd50b0__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../node_modules/babel-loader/lib/index.js!../../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??ruleSet[1].rules[3]!../../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./AdvancedTab.vue?vue&type=template&id=63fd50b0 */ "./node_modules/babel-loader/lib/index.js!./node_modules/vue-loader/lib/loaders/templateLoader.js??ruleSet[1].rules[3]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./apps/user_ldap/src/components/SettingsTabs/AdvancedTab.vue?vue&type=template&id=63fd50b0");
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_node_modules_vue_loader_lib_loaders_templateLoader_js_ruleSet_1_rules_3_node_modules_vue_loader_lib_index_js_vue_loader_options_AdvancedTab_vue_vue_type_template_id_63fd50b0_scoped_true__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../node_modules/babel-loader/lib/index.js!../../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??ruleSet[1].rules[3]!../../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./AdvancedTab.vue?vue&type=template&id=63fd50b0&scoped=true */ "./node_modules/babel-loader/lib/index.js!./node_modules/vue-loader/lib/loaders/templateLoader.js??ruleSet[1].rules[3]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./apps/user_ldap/src/components/SettingsTabs/AdvancedTab.vue?vue&type=template&id=63fd50b0&scoped=true");
 
 
 /***/ }),
 
-/***/ "./apps/user_ldap/src/components/SettingsTabs/ExpertTab.vue?vue&type=template&id=47a98ee8":
-/*!************************************************************************************************!*\
-  !*** ./apps/user_ldap/src/components/SettingsTabs/ExpertTab.vue?vue&type=template&id=47a98ee8 ***!
-  \************************************************************************************************/
+/***/ "./apps/user_ldap/src/components/SettingsTabs/ExpertTab.vue?vue&type=template&id=47a98ee8&scoped=true":
+/*!************************************************************************************************************!*\
+  !*** ./apps/user_ldap/src/components/SettingsTabs/ExpertTab.vue?vue&type=template&id=47a98ee8&scoped=true ***!
+  \************************************************************************************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   render: () => (/* reexport safe */ _node_modules_babel_loader_lib_index_js_node_modules_vue_loader_lib_loaders_templateLoader_js_ruleSet_1_rules_3_node_modules_vue_loader_lib_index_js_vue_loader_options_ExpertTab_vue_vue_type_template_id_47a98ee8__WEBPACK_IMPORTED_MODULE_0__.render),
-/* harmony export */   staticRenderFns: () => (/* reexport safe */ _node_modules_babel_loader_lib_index_js_node_modules_vue_loader_lib_loaders_templateLoader_js_ruleSet_1_rules_3_node_modules_vue_loader_lib_index_js_vue_loader_options_ExpertTab_vue_vue_type_template_id_47a98ee8__WEBPACK_IMPORTED_MODULE_0__.staticRenderFns)
+/* harmony export */   render: () => (/* reexport safe */ _node_modules_babel_loader_lib_index_js_node_modules_vue_loader_lib_loaders_templateLoader_js_ruleSet_1_rules_3_node_modules_vue_loader_lib_index_js_vue_loader_options_ExpertTab_vue_vue_type_template_id_47a98ee8_scoped_true__WEBPACK_IMPORTED_MODULE_0__.render),
+/* harmony export */   staticRenderFns: () => (/* reexport safe */ _node_modules_babel_loader_lib_index_js_node_modules_vue_loader_lib_loaders_templateLoader_js_ruleSet_1_rules_3_node_modules_vue_loader_lib_index_js_vue_loader_options_ExpertTab_vue_vue_type_template_id_47a98ee8_scoped_true__WEBPACK_IMPORTED_MODULE_0__.staticRenderFns)
 /* harmony export */ });
-/* harmony import */ var _node_modules_babel_loader_lib_index_js_node_modules_vue_loader_lib_loaders_templateLoader_js_ruleSet_1_rules_3_node_modules_vue_loader_lib_index_js_vue_loader_options_ExpertTab_vue_vue_type_template_id_47a98ee8__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../node_modules/babel-loader/lib/index.js!../../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??ruleSet[1].rules[3]!../../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./ExpertTab.vue?vue&type=template&id=47a98ee8 */ "./node_modules/babel-loader/lib/index.js!./node_modules/vue-loader/lib/loaders/templateLoader.js??ruleSet[1].rules[3]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./apps/user_ldap/src/components/SettingsTabs/ExpertTab.vue?vue&type=template&id=47a98ee8");
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_node_modules_vue_loader_lib_loaders_templateLoader_js_ruleSet_1_rules_3_node_modules_vue_loader_lib_index_js_vue_loader_options_ExpertTab_vue_vue_type_template_id_47a98ee8_scoped_true__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../node_modules/babel-loader/lib/index.js!../../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??ruleSet[1].rules[3]!../../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./ExpertTab.vue?vue&type=template&id=47a98ee8&scoped=true */ "./node_modules/babel-loader/lib/index.js!./node_modules/vue-loader/lib/loaders/templateLoader.js??ruleSet[1].rules[3]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./apps/user_ldap/src/components/SettingsTabs/ExpertTab.vue?vue&type=template&id=47a98ee8&scoped=true");
 
 
 /***/ }),
@@ -3275,6 +3213,30 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   staticRenderFns: () => (/* reexport safe */ _node_modules_babel_loader_lib_index_js_node_modules_vue_loader_lib_loaders_templateLoader_js_ruleSet_1_rules_3_node_modules_vue_loader_lib_index_js_vue_loader_options_Settings_vue_vue_type_template_id_91565fbc_scoped_true__WEBPACK_IMPORTED_MODULE_0__.staticRenderFns)
 /* harmony export */ });
 /* harmony import */ var _node_modules_babel_loader_lib_index_js_node_modules_vue_loader_lib_loaders_templateLoader_js_ruleSet_1_rules_3_node_modules_vue_loader_lib_index_js_vue_loader_options_Settings_vue_vue_type_template_id_91565fbc_scoped_true__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/babel-loader/lib/index.js!../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??ruleSet[1].rules[3]!../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./Settings.vue?vue&type=template&id=91565fbc&scoped=true */ "./node_modules/babel-loader/lib/index.js!./node_modules/vue-loader/lib/loaders/templateLoader.js??ruleSet[1].rules[3]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./apps/user_ldap/src/views/Settings.vue?vue&type=template&id=91565fbc&scoped=true");
+
+
+/***/ }),
+
+/***/ "./apps/user_ldap/src/components/SettingsTabs/AdvancedTab.vue?vue&type=style&index=0&id=63fd50b0&lang=scss&scoped=true":
+/*!*****************************************************************************************************************************!*\
+  !*** ./apps/user_ldap/src/components/SettingsTabs/AdvancedTab.vue?vue&type=style&index=0&id=63fd50b0&lang=scss&scoped=true ***!
+  \*****************************************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_style_loader_dist_cjs_js_node_modules_css_loader_dist_cjs_js_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_sass_loader_dist_cjs_js_node_modules_vue_loader_lib_index_js_vue_loader_options_AdvancedTab_vue_vue_type_style_index_0_id_63fd50b0_lang_scss_scoped_true__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../node_modules/style-loader/dist/cjs.js!../../../../../node_modules/css-loader/dist/cjs.js!../../../../../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../../../../../node_modules/sass-loader/dist/cjs.js!../../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./AdvancedTab.vue?vue&type=style&index=0&id=63fd50b0&lang=scss&scoped=true */ "./node_modules/style-loader/dist/cjs.js!./node_modules/css-loader/dist/cjs.js!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/sass-loader/dist/cjs.js!./node_modules/vue-loader/lib/index.js??vue-loader-options!./apps/user_ldap/src/components/SettingsTabs/AdvancedTab.vue?vue&type=style&index=0&id=63fd50b0&lang=scss&scoped=true");
+
+
+/***/ }),
+
+/***/ "./apps/user_ldap/src/components/SettingsTabs/ExpertTab.vue?vue&type=style&index=0&id=47a98ee8&lang=scss&scoped=true":
+/*!***************************************************************************************************************************!*\
+  !*** ./apps/user_ldap/src/components/SettingsTabs/ExpertTab.vue?vue&type=style&index=0&id=47a98ee8&lang=scss&scoped=true ***!
+  \***************************************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_style_loader_dist_cjs_js_node_modules_css_loader_dist_cjs_js_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_sass_loader_dist_cjs_js_node_modules_vue_loader_lib_index_js_vue_loader_options_ExpertTab_vue_vue_type_style_index_0_id_47a98ee8_lang_scss_scoped_true__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../node_modules/style-loader/dist/cjs.js!../../../../../node_modules/css-loader/dist/cjs.js!../../../../../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../../../../../node_modules/sass-loader/dist/cjs.js!../../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./ExpertTab.vue?vue&type=style&index=0&id=47a98ee8&lang=scss&scoped=true */ "./node_modules/style-loader/dist/cjs.js!./node_modules/css-loader/dist/cjs.js!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/sass-loader/dist/cjs.js!./node_modules/vue-loader/lib/index.js??vue-loader-options!./apps/user_ldap/src/components/SettingsTabs/ExpertTab.vue?vue&type=style&index=0&id=47a98ee8&lang=scss&scoped=true");
 
 
 /***/ }),
@@ -3581,4 +3543,4 @@ module.exports = "data:image/svg+xml,%3c%21--%20-%20SPDX-FileCopyrightText:%2020
 /******/ 	
 /******/ })()
 ;
-//# sourceMappingURL=user_ldap-main.js.map?v=14e78eed958d6ecf414f
+//# sourceMappingURL=user_ldap-main.js.map?v=182abecf1d759a982c8f
