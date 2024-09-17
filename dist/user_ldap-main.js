@@ -740,13 +740,12 @@ var render = function render() {
     staticClass: "ldap-wizard__advanced__section"
   }, [_c("h3", [_vm._v(_vm._s(_setup.t("user_ldap", "Connection Settings")))]), _vm._v(" "), _c(_setup.NcCheckboxRadioSwitch, {
     attrs: {
-      checked: _setup.ldapConfig.ldapConfigurationActive,
-      value: "1",
+      checked: _setup.ldapConfig.ldapConfigurationActive === "1",
       "aria-label": _setup.t("user_ldap", "When unchecked, this configuration will be skipped.")
     },
     on: {
       "update:checked": function ($event) {
-        return _vm.$set(_setup.ldapConfig, "ldapConfigurationActive", $event);
+        _setup.ldapConfig.ldapConfigurationActive = $event ? "1" : "0";
       }
     }
   }, [_vm._v("\n\t\t\t" + _vm._s(_setup.t("user_ldap", "Configuration Active")) + "\n\t\t")]), _vm._v(" "), _c(_setup.NcTextField, {
@@ -767,17 +766,26 @@ var render = function render() {
       value: _setup.ldapConfig.ldapBackupPort,
       label: _setup.t("user_ldap", "Backup (Replica) Port")
     }
-  }), _vm._v(" "), _vm._v('\n\t\t\t">\n\t\t\t' + _vm._s(_setup.t("user_ldap", "Disable Main Server")) + "\n\t\t"), _vm._v(" "), _c(_setup.NcCheckboxRadioSwitch, {
+  }), _vm._v(" "), _c(_setup.NcCheckboxRadioSwitch, {
     attrs: {
-      checked: _setup.ldapConfig.turnOffCertCheck,
-      "aria-label": _setup.t("user_ldap", "Not recommended, use it for testing only! If connection only works with this option, import the LDAP server's SSL certificate in your {instanceName} server.", {
-        instanceName: _setup.instanceName
-      }),
-      value: "1"
+      checked: _setup.ldapConfig.ldapOverrideMainServer === "1",
+      "aria-label": _setup.t("user_ldap", "Only connect to the replica server.")
     },
     on: {
       "update:checked": function ($event) {
-        return _vm.$set(_setup.ldapConfig, "turnOffCertCheck", $event);
+        _setup.ldapConfig.ldapOverrideMainServer = $event ? "1" : "0";
+      }
+    }
+  }, [_vm._v("\n\t\t\t" + _vm._s(_setup.t("user_ldap", "Disable Main Server")) + "\n\t\t")]), _vm._v(" "), _c(_setup.NcCheckboxRadioSwitch, {
+    attrs: {
+      checked: _setup.ldapConfig.turnOffCertCheck === "1",
+      "aria-label": _setup.t("user_ldap", "Not recommended, use it for testing only! If connection only works with this option, import the LDAP server's SSL certificate in your {instanceName} server.", {
+        instanceName: _setup.instanceName
+      })
+    },
+    on: {
+      "update:checked": function ($event) {
+        _setup.ldapConfig.turnOffCertCheck = $event ? "1" : "0";
       }
     }
   }, [_vm._v("\n\t\t\t" + _vm._s(_setup.t("user_ldap", "Turn off SSL certificate validation.")) + "\n\t\t")]), _vm._v(" "), _c(_setup.NcTextField, {
@@ -838,13 +846,12 @@ var render = function render() {
     }
   }), _vm._v(" "), _c(_setup.NcCheckboxRadioSwitch, {
     attrs: {
-      checked: _setup.ldapConfig.markRemnantsAsDisabled,
-      value: "1",
+      checked: _setup.ldapConfig.markRemnantsAsDisabled === "1",
       "aria-label": _setup.t("user_ldap", "When switched on, users imported from LDAP which are then missing will be disabled")
     },
     on: {
       "update:checked": function ($event) {
-        return _vm.$set(_setup.ldapConfig, "markRemnantsAsDisabled", $event);
+        _setup.ldapConfig.markRemnantsAsDisabled = $event ? "1" : "0";
       }
     }
   }, [_vm._v("\n\t\t\t" + _vm._s(_setup.t("user_ldap", "Disable users missing from LDAP")) + "\n\t\t")]), _vm._v(" "), _c(_setup.NcTextField, {
@@ -895,13 +902,12 @@ var render = function render() {
     }
   }), _vm._v(" "), _c(_setup.NcCheckboxRadioSwitch, {
     attrs: {
-      checked: _setup.ldapConfig.ldapNestedGroups,
-      value: "1",
+      checked: _setup.ldapConfig.ldapNestedGroups === "1",
       "aria-label": _setup.t("user_ldap", "When switched on, groups that contain groups are supported. (Only works if the group member attribute contains DNs.)")
     },
     on: {
       "update:checked": function ($event) {
-        return _vm.$set(_setup.ldapConfig, "ldapNestedGroups", $event);
+        _setup.ldapConfig.ldapNestedGroups = $event ? "1" : "0";
       }
     }
   }, [_vm._v("\n\t\t\t" + _vm._s(_setup.t("user_ldap", "Nested Groups")) + "\n\t\t")]), _vm._v(" "), _c(_setup.NcTextField, {
@@ -918,13 +924,12 @@ var render = function render() {
     }
   }), _vm._v(" "), _c(_setup.NcCheckboxRadioSwitch, {
     attrs: {
-      checked: _setup.ldapConfig.turnOnPasswordChange,
-      value: "1",
+      checked: _setup.ldapConfig.turnOnPasswordChange === "1",
       "aria-label": _setup.t("user_ldap", "Allow LDAP users to change their password and allow Super Administrators and Group Administrators to change the password of their LDAP users. Only works when access control policies are configured accordingly on the LDAP server. As passwords are sent in plaintext to the LDAP server, transport encryption must be used and password hashing should be configured on the LDAP server.")
     },
     on: {
       "update:checked": function ($event) {
-        return _vm.$set(_setup.ldapConfig, "turnOnPasswordChange", $event);
+        _setup.ldapConfig.turnOnPasswordChange = $event ? "1" : "0";
       }
     }
   }, [_vm._v("\n\t\t\t" + _vm._s(_setup.t("user_ldap", "Enable LDAP password changes per user")) + "\n\t\t")]), _vm._v(" "), _c("span", {
@@ -1366,22 +1371,22 @@ var render = function render() {
     staticClass: "ldap-wizard__login__line ldap-wizard__login__login-attributes"
   }, [_c(_setup.NcCheckboxRadioSwitch, {
     attrs: {
-      checked: _setup.ldapConfig.ldapAgentName,
+      checked: _setup.ldapConfig.ldapAgentName === "1",
       "aria-label": _setup.t("user_ldap", "Allows login against the LDAP/AD username, which is either `uid` or `sAMAccountName` and will be detected.")
     },
     on: {
       "update:checked": function ($event) {
-        return _vm.$set(_setup.ldapConfig, "ldapAgentName", $event);
+        _setup.ldapConfig.ldapAgentName = $event ? "1" : "0";
       }
     }
   }, [_vm._v("\n\t\t\t" + _vm._s(_setup.t("user_ldap", "LDAP/AD Username")) + "\n\t\t")]), _vm._v(" "), _c(_setup.NcCheckboxRadioSwitch, {
     attrs: {
-      checked: _setup.ldapConfig.ldapLoginFilterEmail,
+      checked: _setup.ldapConfig.ldapLoginFilterEmail === "1",
       "aria-label": _setup.t("user_ldap", "Allows login against an email attribute. `mail` and `mailPrimaryAddress` allowed.")
     },
     on: {
       "update:checked": function ($event) {
-        return _vm.$set(_setup.ldapConfig, "ldapLoginFilterEmail", $event);
+        _setup.ldapConfig.ldapLoginFilterEmail = $event ? "1" : "0";
       }
     }
   }, [_vm._v("\n\t\t\t" + _vm._s(_setup.t("user_ldap", "LDAP/AD Email Address")) + "\n\t\t")]), _vm._v(" "), _c(_setup.NcSelect, {
@@ -3543,4 +3548,4 @@ module.exports = "data:image/svg+xml,%3c%21--%20-%20SPDX-FileCopyrightText:%2020
 /******/ 	
 /******/ })()
 ;
-//# sourceMappingURL=user_ldap-main.js.map?v=182abecf1d759a982c8f
+//# sourceMappingURL=user_ldap-main.js.map?v=522d364fd379da729c95
