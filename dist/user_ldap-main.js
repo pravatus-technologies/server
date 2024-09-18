@@ -41,14 +41,18 @@ new LDAPSettingsAppVue({
 
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   callWizard: () => (/* binding */ callWizard),
+/* harmony export */   clearMapping: () => (/* binding */ clearMapping),
 /* harmony export */   createConfig: () => (/* binding */ createConfig),
 /* harmony export */   deleteConfig: () => (/* binding */ deleteConfig),
+/* harmony export */   testConfiguration: () => (/* binding */ testConfiguration),
 /* harmony export */   updateConfig: () => (/* binding */ updateConfig)
 /* harmony export */ });
 /* harmony import */ var path__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! path */ "./node_modules/path/path.js");
 /* harmony import */ var path__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(path__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _nextcloud_axios__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @nextcloud/axios */ "./node_modules/@nextcloud/axios/dist/index.mjs");
 /* harmony import */ var _nextcloud_router__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @nextcloud/router */ "./node_modules/@nextcloud/router/dist/index.mjs");
+/* provided dependency */ var console = __webpack_require__(/*! ./node_modules/console-browserify/index.js */ "./node_modules/console-browserify/index.js");
 /**
  * SPDX-FileCopyrightText: 2023 Nextcloud GmbH and Nextcloud contributors
  * SPDX-License-Identifier: AGPL-3.0-or-later
@@ -56,13 +60,18 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-const API_ENDPOINT = path__WEBPACK_IMPORTED_MODULE_0___default().join((0,_nextcloud_router__WEBPACK_IMPORTED_MODULE_2__.getAppRootUrl)('user_ldap'), '/api/v1/config');
+const APP_URL = (0,_nextcloud_router__WEBPACK_IMPORTED_MODULE_2__.getAppRootUrl)('user_ldap');
+const AJAX_ENDPOINT = path__WEBPACK_IMPORTED_MODULE_0___default().join(APP_URL, '/ajax');
+const OCS_APP_URL = (0,_nextcloud_router__WEBPACK_IMPORTED_MODULE_2__.generateOcsUrl)('apps/user_ldap');
+const CONFIG_API_ENDPOINT = path__WEBPACK_IMPORTED_MODULE_0___default().join(OCS_APP_URL, '/api/v1/config');
+console.log(OCS_APP_URL);
+console.log(CONFIG_API_ENDPOINT);
 /**
  *
  * @param config
  */
 async function createConfig(config) {
-  const response = await _nextcloud_axios__WEBPACK_IMPORTED_MODULE_1__["default"].post(API_ENDPOINT, config);
+  const response = await _nextcloud_axios__WEBPACK_IMPORTED_MODULE_1__["default"].post(CONFIG_API_ENDPOINT, config);
   return {
     configId: response.data.configId,
     config: response.data.config
@@ -74,7 +83,7 @@ async function createConfig(config) {
  * @param config
  */
 async function updateConfig(configId, config) {
-  const response = await _nextcloud_axios__WEBPACK_IMPORTED_MODULE_1__["default"].put(path__WEBPACK_IMPORTED_MODULE_0___default().join(API_ENDPOINT, configId), config);
+  const response = await _nextcloud_axios__WEBPACK_IMPORTED_MODULE_1__["default"].put(path__WEBPACK_IMPORTED_MODULE_0___default().join(CONFIG_API_ENDPOINT, configId), config);
   return response.data;
 }
 /**
@@ -82,8 +91,44 @@ async function updateConfig(configId, config) {
  * @param configId
  */
 async function deleteConfig(configId) {
-  await _nextcloud_axios__WEBPACK_IMPORTED_MODULE_1__["default"].delete(path__WEBPACK_IMPORTED_MODULE_0___default().join(API_ENDPOINT, configId));
+  await _nextcloud_axios__WEBPACK_IMPORTED_MODULE_1__["default"].delete(path__WEBPACK_IMPORTED_MODULE_0___default().join(CONFIG_API_ENDPOINT, configId));
   return true;
+}
+/**
+ * Starts a configuration test.
+ * @param configId
+ */
+async function testConfiguration(configId) {
+  const response = await _nextcloud_axios__WEBPACK_IMPORTED_MODULE_1__["default"].post(path__WEBPACK_IMPORTED_MODULE_0___default().join(AJAX_ENDPOINT, 'testConfiguration.php'), undefined, {
+    params: {
+      ldap_serverconfig_chooser: configId
+    }
+  });
+  return response.data; // TODO: check response content
+}
+/**
+ *
+ * @param subject
+ */
+async function clearMapping(subject) {
+  const response = await _nextcloud_axios__WEBPACK_IMPORTED_MODULE_1__["default"].post(path__WEBPACK_IMPORTED_MODULE_0___default().join(AJAX_ENDPOINT, 'clearMappings.php'), undefined, {
+    data: {
+      ldap_clear_mapping: subject
+    }
+  });
+  return response.data; // TODO: check response content
+}
+/**
+ * Calls the wizard endpoint.
+ * @param action
+ * @param configId
+ */
+async function callWizard(action, configId) {
+  const params = new FormData();
+  params.set('action', action);
+  params.set('ldap_serverconfig_chooser', configId);
+  const response = await _nextcloud_axios__WEBPACK_IMPORTED_MODULE_1__["default"].post(path__WEBPACK_IMPORTED_MODULE_0___default().join(AJAX_ENDPOINT, 'wizard.php'), params);
+  return response.data;
 }
 
 /***/ }),
@@ -110,58 +155,61 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-/**
- *
- * @param {...any} args
- */
-function useLDAPConfigStore(...args) {
-  const store = (0,pinia__WEBPACK_IMPORTED_MODULE_2__.defineStore)('ldapconfig', {
-    state: () => ({
-      ldapConfigs: (0,_nextcloud_initial_state__WEBPACK_IMPORTED_MODULE_0__.loadState)('user_ldap', 'ldapConfigs'),
-      defaultLdapConfig: (0,_nextcloud_initial_state__WEBPACK_IMPORTED_MODULE_0__.loadState)('user_ldap', 'ldapDefaultConfig')
-    }),
-    actions: {
-      async create() {
-        const {
-          configId,
-          config
-        } = await (0,_services_ldapConfigService__WEBPACK_IMPORTED_MODULE_1__.createConfig)({
-          ...this.defaultLdapConfig
-        });
-        vue__WEBPACK_IMPORTED_MODULE_3__["default"].set(this.ldapConfigs, configId, config);
-      },
-      async copy(fromConfigId) {
-        const {
-          configId,
-          config
-        } = await (0,_services_ldapConfigService__WEBPACK_IMPORTED_MODULE_1__.createConfig)({
-          ...this.ldapConfigs[fromConfigId]
-        });
-        vue__WEBPACK_IMPORTED_MODULE_3__["default"].set(this.ldapConfigs, configId, config);
-      },
-      async remove(configId) {
-        const result = await (0,_services_ldapConfigService__WEBPACK_IMPORTED_MODULE_1__.deleteConfig)(configId);
-        if (result === true) {
-          vue__WEBPACK_IMPORTED_MODULE_3__["default"].delete(this.ldapConfigs, configId);
-        }
-      },
-      async update(configId, config) {
-        config = await (0,_services_ldapConfigService__WEBPACK_IMPORTED_MODULE_1__.updateConfig)(configId, config);
-        vue__WEBPACK_IMPORTED_MODULE_3__["default"].set(this.ldapConfigs, configId, config);
-      },
-      async detectPort() {
-        // TODO
-      },
-      async detectBaseDN() {
-        // TODO
-      },
-      async testBaseDN() {
-        // TODO
-      }
+const useLDAPConfigStore = (0,pinia__WEBPACK_IMPORTED_MODULE_2__.defineStore)('ldapconfig', () => {
+  const ldapConfigs = (0,vue__WEBPACK_IMPORTED_MODULE_3__.ref)((0,_nextcloud_initial_state__WEBPACK_IMPORTED_MODULE_0__.loadState)('user_ldap', 'ldapConfigs'));
+  const defaultLdapConfig = (0,vue__WEBPACK_IMPORTED_MODULE_3__.ref)((0,_nextcloud_initial_state__WEBPACK_IMPORTED_MODULE_0__.loadState)('user_ldap', 'ldapDefaultConfig'));
+  /**
+   *
+   */
+  async function create() {
+    const {
+      configId,
+      config
+    } = await (0,_services_ldapConfigService__WEBPACK_IMPORTED_MODULE_1__.createConfig)({
+      ...defaultLdapConfig.value
+    });
+    vue__WEBPACK_IMPORTED_MODULE_3__["default"].set(ldapConfigs, configId, config);
+  }
+  /**
+   *
+   * @param fromConfigId
+   */
+  async function copy(fromConfigId) {
+    const {
+      configId,
+      config
+    } = await (0,_services_ldapConfigService__WEBPACK_IMPORTED_MODULE_1__.createConfig)({
+      ...ldapConfigs[fromConfigId]
+    });
+    vue__WEBPACK_IMPORTED_MODULE_3__["default"].set(ldapConfigs, configId, config);
+  }
+  /**
+   *
+   * @param configId
+   */
+  async function remove(configId) {
+    const result = await (0,_services_ldapConfigService__WEBPACK_IMPORTED_MODULE_1__.deleteConfig)(configId);
+    if (result === true) {
+      vue__WEBPACK_IMPORTED_MODULE_3__["default"].delete(ldapConfigs, configId);
     }
-  });
-  return store(...args);
-}
+  }
+  /**
+   *
+   * @param configId
+   * @param config
+   */
+  async function update(configId) {
+    const config = await (0,_services_ldapConfigService__WEBPACK_IMPORTED_MODULE_1__.updateConfig)(configId, ldapConfigs[configId]);
+    vue__WEBPACK_IMPORTED_MODULE_3__["default"].set(ldapConfigs, configId, config);
+  }
+  return {
+    ldapConfigs,
+    create,
+    copy,
+    remove,
+    update
+  };
+});
 
 /***/ }),
 
@@ -440,12 +488,13 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
-/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.runtime.esm.js");
+/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.runtime.esm.js");
 /* harmony import */ var vue_material_design_icons_ContentCopy_vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vue-material-design-icons/ContentCopy.vue */ "./node_modules/vue-material-design-icons/ContentCopy.vue");
 /* harmony import */ var vue_material_design_icons_Delete_vue__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! vue-material-design-icons/Delete.vue */ "./node_modules/vue-material-design-icons/Delete.vue");
 /* harmony import */ var _nextcloud_l10n__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @nextcloud/l10n */ "./node_modules/@nextcloud/l10n/dist/index.mjs");
 /* harmony import */ var _nextcloud_vue__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @nextcloud/vue */ "./node_modules/@nextcloud/vue/dist/index.mjs");
 /* harmony import */ var _store_config__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../store/config */ "./apps/user_ldap/src/store/config.ts");
+/* harmony import */ var _services_ldapConfigService__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../services/ldapConfigService */ "./apps/user_ldap/src/services/ldapConfigService.ts");
 
 
 
@@ -453,7 +502,8 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (/*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_5__.defineComponent)({
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (/*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_6__.defineComponent)({
   __name: 'ServerTab',
   props: {
     ldapConfigId: {
@@ -466,35 +516,57 @@ __webpack_require__.r(__webpack_exports__);
       ldapConfigId
     } = __props;
     const ldapConfigStore = (0,_store_config__WEBPACK_IMPORTED_MODULE_4__.useLDAPConfigStore)();
-    const ldapConfig = (0,vue__WEBPACK_IMPORTED_MODULE_5__.computed)(() => ldapConfigStore.ldapConfigs[ldapConfigId]);
-    // TODO: use this
-    const advancedAdmin = (0,vue__WEBPACK_IMPORTED_MODULE_5__.ref)(false);
+    const ldapConfig = (0,vue__WEBPACK_IMPORTED_MODULE_6__.computed)(() => ldapConfigStore.ldapConfigs[ldapConfigId]);
+    const usersCount = (0,vue__WEBPACK_IMPORTED_MODULE_6__.ref)(undefined);
+    const currentWizardActions = (0,vue__WEBPACK_IMPORTED_MODULE_6__.ref)([]);
     /**
      *
      */
-    async function detectPort() {
-      // TODO
+    async function guessPortAndTLS() {
+      currentWizardActions.value.push('guessPortAndTLS');
+      const {
+        changes: {
+          ldap_port: ldapPort
+        }
+      } = await (0,_services_ldapConfigService__WEBPACK_IMPORTED_MODULE_5__.callWizard)('guessPortAndTLS', ldapConfigId);
+      ldapConfig.value.ldapPort = ldapPort;
+      currentWizardActions.value.splice(currentWizardActions.value.indexOf('guessPortAndTLS'), 1);
     }
     /**
      *
      */
-    async function detectBaseDN() {
-      // TODO
+    async function guessBaseDN() {
+      currentWizardActions.value.push('guessBaseDN');
+      const {
+        changes: {
+          ldap_base: ldapBase
+        }
+      } = await (0,_services_ldapConfigService__WEBPACK_IMPORTED_MODULE_5__.callWizard)('guessBaseDN', ldapConfigId);
+      ldapConfig.value.ldapBase = ldapBase;
+      currentWizardActions.value.splice(currentWizardActions.value.indexOf('guessPortAndTLS'), 1);
     }
     /**
      *
      */
-    async function testBaseDN() {
-      // TODO
+    async function countInBaseDN() {
+      currentWizardActions.value.push('countInBaseDN');
+      const {
+        changes: {
+          ldap_test_base: ldapTestBase
+        }
+      } = await (0,_services_ldapConfigService__WEBPACK_IMPORTED_MODULE_5__.callWizard)('countInBaseDN', ldapConfigId);
+      usersCount.value = ldapTestBase;
+      currentWizardActions.value.splice(currentWizardActions.value.indexOf('guessPortAndTLS'), 1);
     }
     return {
       __sfc: true,
       ldapConfigStore,
       ldapConfig,
-      advancedAdmin,
-      detectPort,
-      detectBaseDN,
-      testBaseDN,
+      usersCount,
+      currentWizardActions,
+      guessPortAndTLS,
+      guessBaseDN,
+      countInBaseDN,
       ContentCopy: vue_material_design_icons_ContentCopy_vue__WEBPACK_IMPORTED_MODULE_0__["default"],
       Delete: vue_material_design_icons_Delete_vue__WEBPACK_IMPORTED_MODULE_1__["default"],
       t: _nextcloud_l10n__WEBPACK_IMPORTED_MODULE_2__.t,
@@ -632,6 +704,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _components_SettingsTabs_AdvancedTab_vue__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../components/SettingsTabs/AdvancedTab.vue */ "./apps/user_ldap/src/components/SettingsTabs/AdvancedTab.vue");
 /* harmony import */ var _components_WizardControls_vue__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ../components/WizardControls.vue */ "./apps/user_ldap/src/components/WizardControls.vue");
 /* harmony import */ var _store_config__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ../store/config */ "./apps/user_ldap/src/store/config.ts");
+/* provided dependency */ var console = __webpack_require__(/*! ./node_modules/console-browserify/index.js */ "./node_modules/console-browserify/index.js");
 
 
 
@@ -668,6 +741,10 @@ __webpack_require__.r(__webpack_exports__);
       id: configId,
       label: `${configId}: ${config.ldapHost}`
     }));
+    ldapConfigStore.$subscribe((mutation, state) => {
+      ldapConfigStore.update(selectedConfigId.value);
+      console.log('mutation', mutation, state);
+    });
     return {
       __sfc: true,
       leftTabs,
@@ -736,9 +813,12 @@ var render = function render() {
     _setup = _vm._self._setupProxy;
   return _c("fieldset", {
     staticClass: "ldap-wizard__advanced"
-  }, [_c("summary", {
-    staticClass: "ldap-wizard__advanced__section"
-  }, [_c("h3", [_vm._v(_vm._s(_setup.t("user_ldap", "Connection Settings")))]), _vm._v(" "), _c(_setup.NcCheckboxRadioSwitch, {
+  }, [_c("details", {
+    staticClass: "ldap-wizard__advanced__section",
+    attrs: {
+      name: "ldap-wizard__advanced__section"
+    }
+  }, [_c("summary", [_c("h3", [_vm._v(_vm._s(_setup.t("user_ldap", "Connection Settings")))])]), _vm._v(" "), _c(_setup.NcCheckboxRadioSwitch, {
     attrs: {
       checked: _setup.ldapConfig.ldapConfigurationActive === "1",
       "aria-label": _setup.t("user_ldap", "When unchecked, this configuration will be skipped.")
@@ -795,9 +875,12 @@ var render = function render() {
       value: _setup.ldapConfig.ldapCacheTTL,
       "helper-text": _setup.t("user_ldap", "in seconds. A change empties the cache.")
     }
-  })], 1), _vm._v(" "), _c("summary", {
-    staticClass: "ldap-wizard__advanced__section"
-  }, [_c("h3", [_vm._v(_vm._s(_setup.t("user_ldap", "Directory Settings")))]), _vm._v(" "), _c(_setup.NcTextField, {
+  })], 1), _vm._v(" "), _c("details", {
+    staticClass: "ldap-wizard__advanced__section",
+    attrs: {
+      name: "ldap-wizard__advanced__section"
+    }
+  }, [_c("summary", [_c("h3", [_vm._v(_vm._s(_setup.t("user_ldap", "Directory Settings")))])]), _vm._v(" "), _c(_setup.NcTextField, {
     attrs: {
       autocomplete: "off",
       value: _setup.ldapConfig.ldapUserDisplayName,
@@ -946,9 +1029,12 @@ var render = function render() {
         return _vm.$set(_setup.ldapConfig, "ldapDefaultPPolicyDN", $event);
       }
     }
-  })], 1), _vm._v(" "), _c("summary", {
-    staticClass: "ldap-wizard__advanced__section"
-  }, [_c("h3", [_vm._v(_vm._s(_setup.t("user_ldap", "Special Attributes")))]), _vm._v(" "), _c(_setup.NcTextField, {
+  })], 1), _vm._v(" "), _c("details", {
+    staticClass: "ldap-wizard__advanced__section",
+    attrs: {
+      name: "ldap-wizard__advanced__section"
+    }
+  }, [_c("summary", [_c("h3", [_vm._v(_vm._s(_setup.t("user_ldap", "Special Attributes")))])]), _vm._v(" "), _c(_setup.NcTextField, {
     attrs: {
       autocomplete: "off",
       value: _setup.ldapConfig.ldapQuotaAttribute,
@@ -1008,9 +1094,12 @@ var render = function render() {
         return _vm.$set(_setup.ldapConfig, "ldapExtStorageHomeAttribute", $event);
       }
     }
-  })], 1), _vm._v(" "), _c("summary", {
-    staticClass: "ldap-wizard__advanced__section"
-  }, [_c("h3", [_vm._v(_vm._s(_setup.t("user_ldap", "User Profile Attributes")))]), _vm._v(" "), _c(_setup.NcTextField, {
+  })], 1), _vm._v(" "), _c("details", {
+    staticClass: "ldap-wizard__advanced__section",
+    attrs: {
+      name: "ldap-wizard__advanced__section"
+    }
+  }, [_c("summary", [_c("h3", [_vm._v(_vm._s(_setup.t("user_ldap", "User Profile Attributes")))])]), _vm._v(" "), _c(_setup.NcTextField, {
     attrs: {
       autocomplete: "off",
       label: _setup.t("user_ldap", "Phone Field"),
@@ -1206,16 +1295,16 @@ var render = function render() {
   })], 1), _vm._v(" "), _c("div", {
     staticClass: "ldap-wizard__expert__line"
   }, [_c("strong", [_vm._v(_vm._s(_setup.t("user_ldap", "Username-LDAP User Mapping")))]), _vm._v("\n\t\t" + _vm._s(_setup.t("user_ldap", "Usernames are used to store and assign metadata. In order to precisely identify and recognize users, each LDAP user will have an internal username. This requires a mapping from username to LDAP user. The created username is mapped to the UUID of the LDAP user. Additionally the DN is cached as well to reduce LDAP interaction, but it is not used for identification. If the DN changes, the changes will be found. The internal username is used all over. Clearing the mappings will have leftovers everywhere. Clearing the mappings is not configuration sensitive, it affects all LDAP configurations! Never clear the mappings in a production environment, only in a testing or experimental stage.")) + "\n\t\t"), _c(_setup.NcButton, {
-    attrs: {
-      id: "ldap_action_clear_user_mappings",
-      type: "button",
-      name: "ldap_action_clear_user_mappings"
+    on: {
+      click: function ($event) {
+        return _vm.console.log("TODO");
+      }
     }
   }, [_vm._v("\n\t\t\t" + _vm._s(_setup.t("user_ldap", "Clear Username-LDAP User Mapping")) + "\n\t\t")]), _vm._v(" "), _c(_setup.NcButton, {
-    attrs: {
-      id: "ldap_action_clear_group_mappings",
-      type: "button",
-      name: "ldap_action_clear_group_mappings"
+    on: {
+      click: function ($event) {
+        return _vm.console.log("TODO");
+      }
     }
   }, [_vm._v("\n\t\t\t" + _vm._s(_setup.t("user_ldap", "Clear Groupname-LDAP Group Mapping")) + "\n\t\t")])], 1)]);
 };
@@ -1371,12 +1460,12 @@ var render = function render() {
     staticClass: "ldap-wizard__login__line ldap-wizard__login__login-attributes"
   }, [_c(_setup.NcCheckboxRadioSwitch, {
     attrs: {
-      checked: _setup.ldapConfig.ldapAgentName === "1",
+      checked: _setup.ldapConfig.ldapLoginFilterUsername === "1",
       "aria-label": _setup.t("user_ldap", "Allows login against the LDAP/AD username, which is either `uid` or `sAMAccountName` and will be detected.")
     },
     on: {
       "update:checked": function ($event) {
-        _setup.ldapConfig.ldapAgentName = $event ? "1" : "0";
+        _setup.ldapConfig.ldapLoginFilterUsername = $event ? "1" : "0";
       }
     }
   }, [_vm._v("\n\t\t\t" + _vm._s(_setup.t("user_ldap", "LDAP/AD Username")) + "\n\t\t")]), _vm._v(" "), _c(_setup.NcCheckboxRadioSwitch, {
@@ -1537,8 +1626,11 @@ var render = function render() {
       }
     }
   }), _vm._v(" "), _c(_setup.NcButton, {
+    attrs: {
+      disabled: _setup.currentWizardActions.includes("guessPortAndTLS")
+    },
     on: {
-      click: _setup.detectPort
+      click: _setup.guessPortAndTLS
     }
   }, [_vm._v("\n\t\t\t\t" + _vm._s(_setup.t("user_ldap", "Detect Port")) + "\n\t\t\t")])], 1)], 1), _vm._v(" "), _c("div", {
     staticClass: "ldap-wizard__server__line"
@@ -1588,23 +1680,29 @@ var render = function render() {
       }
     }
   }), _vm._v(" "), _c(_setup.NcButton, {
+    attrs: {
+      disabled: _setup.currentWizardActions.includes("guessBaseDN")
+    },
     on: {
-      click: _setup.detectBaseDN
+      click: _setup.guessBaseDN
     }
   }, [_vm._v("\n\t\t\t" + _vm._s(_setup.t("user_ldap", "Detect Base DN")) + "\n\t\t")]), _vm._v(" "), _c(_setup.NcButton, {
+    attrs: {
+      disabled: _setup.currentWizardActions.includes("countInBaseDN")
+    },
     on: {
-      click: _setup.testBaseDN
+      click: _setup.countInBaseDN
     }
   }, [_vm._v("\n\t\t\t" + _vm._s(_setup.t("user_ldap", "Test Base DN")) + "\n\t\t")])], 1), _vm._v(" "), _c("div", {
     staticClass: "ldap-wizard__server__line"
   }, [_c(_setup.NcCheckboxRadioSwitch, {
     attrs: {
-      checked: _setup.advancedAdmin,
+      checked: _setup.ldapConfig.ldapExperiencedAdmin === "1",
       "aria-label": _setup.t("user_ldap", "Avoids automatic LDAP requests. Better for bigger setups, but requires some LDAP knowledge.")
     },
     on: {
       "update:checked": function ($event) {
-        _setup.advancedAdmin = $event;
+        _setup.ldapConfig.ldapExperiencedAdmin = $event ? "1" : "0";
       }
     }
   }, [_vm._v("\n\t\t\t" + _vm._s(_setup.t("user_ldap", "Manually enter LDAP filters (recommended for large directories)")) + "\n\t\t")])], 1)]);
@@ -1917,6 +2015,16 @@ ___CSS_LOADER_EXPORT___.push([module.id, `.ldap-wizard__advanced[data-v-63fd50b0
   display: flex;
   flex-direction: column;
   gap: 8px;
+}
+.ldap-wizard__advanced__section summary h3[data-v-63fd50b0] {
+  margin: 0;
+  display: inline;
+  cursor: pointer;
+  color: var(--color-text-lighter);
+  font-size: 16px;
+}
+.ldap-wizard__advanced__section:hover h3[data-v-63fd50b0], .ldap-wizard__advanced__section[open] h3[data-v-63fd50b0] {
+  color: var(--color-text-light);
 }`, ""]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
@@ -3548,4 +3656,4 @@ module.exports = "data:image/svg+xml,%3c%21--%20-%20SPDX-FileCopyrightText:%2020
 /******/ 	
 /******/ })()
 ;
-//# sourceMappingURL=user_ldap-main.js.map?v=522d364fd379da729c95
+//# sourceMappingURL=user_ldap-main.js.map?v=8fe1f6a7613e1d66597e
