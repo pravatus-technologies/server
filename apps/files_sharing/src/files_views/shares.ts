@@ -166,9 +166,9 @@ export default () => {
 					return span
 				},
 				sort(nodeA, nodeB) {
-					const deletionTimeA = nodeA.attributes?.expiration || nodeA?.mtime || 0
-					const deletionTimeB = nodeB.attributes?.expiration || nodeB?.mtime || 0
-					return deletionTimeB - deletionTimeA
+					const expirationTimeA = nodeA.attributes?.expiration || 0
+					const expirationTimeB = nodeB.attributes?.expiration || 0
+					return expirationTimeB - expirationTimeA
 				},
 			}),
 		],

@@ -14,10 +14,10 @@ import LinkSvg from '@mdi/svg/svg/link.svg?raw'
 import CircleSvg from '../../../../core/img/apps/circles.svg?raw'
 
 import { action as sidebarAction } from '../../../files/src/actions/sidebarAction'
+import { expiredSharesViewId } from '../files_views/shares'
 import { generateAvatarSvg } from '../utils/AccountIcon'
 
 import './sharingStatusAction.scss'
-import { expiredSharesViewId } from '../files_views/shares'
 
 const isExternal = (node: Node) => {
 	return node.attributes.remote_id !== undefined
