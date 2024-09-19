@@ -118,7 +118,7 @@ class SMB extends Common implements INotifyStorage {
 		parent::__construct($params);
 	}
 
-	private function splitUser($user) {
+	private function splitUser($user): array {
 		if (str_contains($user, '/')) {
 			return explode('/', $user, 2);
 		} elseif (str_contains($user, '\\')) {
@@ -128,10 +128,7 @@ class SMB extends Common implements INotifyStorage {
 		return [null, $user];
 	}
 
-	/**
-	 * @return string
-	 */
-	public function getId() {
+	public function getId(): string {
 		// FIXME: double slash to keep compatible with the old storage ids,
 		// failure to do so will lead to creation of a new storage id and
 		// loss of shares from the storage
@@ -140,13 +137,12 @@ class SMB extends Common implements INotifyStorage {
 
 	/**
 	 * @param string $path
-	 * @return string
 	 */
-	protected function buildPath($path) {
+	protected function buildPath($path): string {
 		return Filesystem::normalizePath($this->root . '/' . $path, true, false, true);
 	}
 
-	protected function relativePath($fullPath) {
+	protected function relativePath($fullPath): ?string {
 		if ($fullPath === $this->root) {
 			return '';
 		} elseif (substr($fullPath, 0, strlen($this->root)) === $this->root) {
@@ -158,10 +154,9 @@ class SMB extends Common implements INotifyStorage {
 
 	/**
 	 * @param string $path
-	 * @return IFileInfo
 	 * @throws StorageAuthException
 	 */
-	protected function getFileInfo($path) {
+	protected function getFileInfo($path): IFileInfo {
 		try {
 			$path = $this->buildPath($path);
 			$cached = $this->statCache[$path] ?? null;
@@ -188,10 +183,9 @@ class SMB extends Common implements INotifyStorage {
 
 	/**
 	 * @param \Exception $e
-	 * @return never
 	 * @throws StorageAuthException
 	 */
-	protected function throwUnavailable(\Exception $e) {
+	protected function throwUnavailable(\Exception $e): never {
 		$this->logger->error('Error while getting file info', ['exception' => $e]);
 		throw new StorageAuthException($e->getMessage(), $e);
 	}
@@ -200,7 +194,6 @@ class SMB extends Common implements INotifyStorage {
 	 * get the acl from fileinfo that is relevant for the configured user
 	 *
 	 * @param IFileInfo $file
-	 * @return ACL|null
 	 */
 	private function getACL(IFileInfo $file): ?ACL {
 		$acls = $file->getAcls();
@@ -272,9 +265,8 @@ class SMB extends Common implements INotifyStorage {
 
 	/**
 	 * @param IFileInfo $info
-	 * @return array
 	 */
-	protected function formatInfo($info) {
+	protected function formatInfo($info): array {
 		$result = [
 			'size' => $info->getSize(),
 			'mtime' => $info->getMTime(),
@@ -292,7 +284,6 @@ class SMB extends Common implements INotifyStorage {
 	 *
 	 * @param string $source the old name of the path
 	 * @param string $target the new name of the path
-	 * @return bool true if the rename is successful, false otherwise
 	 */
 	public function rename($source, $target, $retry = true): bool {
 		if ($this->isRootDir($source) || $this->isRootDir($target)) {
@@ -333,7 +324,7 @@ class SMB extends Common implements INotifyStorage {
 		return $result;
 	}
 
-	public function stat($path, $retry = true) {
+	public function stat($path, $retry = true): array|false {
 		try {
 			$result = $this->formatInfo($this->getFileInfo($path));
 		} catch (ForbiddenException $e) {
@@ -355,10 +346,8 @@ class SMB extends Common implements INotifyStorage {
 
 	/**
 	 * get the best guess for the modification time of the share
-	 *
-	 * @return int
 	 */
-	private function shareMTime() {
+	private function shareMTime(): int {
 		$highestMTime = 0;
 		$files = $this->share->dir($this->root);
 		foreach ($files as $fileInfo) {
@@ -379,26 +368,22 @@ class SMB extends Common implements INotifyStorage {
 	 * Check if the path is our root dir (not the smb one)
 	 *
 	 * @param string $path the path
-	 * @return bool
 	 */
-	private function isRootDir($path) {
+	private function isRootDir($path): bool {
 		return $path === '' || $path === '/' || $path === '.';
 	}
 
 	/**
 	 * Check if our root points to a smb share
-	 *
-	 * @return bool true if our root points to a share false otherwise
 	 */
-	private function remoteIsShare() {
+	private function remoteIsShare(): bool {
 		return $this->share->getName() && (!$this->root || $this->root === '/');
 	}
 
 	/**
 	 * @param string $path
-	 * @return bool
 	 */
-	public function unlink($path) {
+	public function unlink($path): bool {
 		if ($this->isRootDir($path)) {
 			return false;
 		}
@@ -427,9 +412,8 @@ class SMB extends Common implements INotifyStorage {
 	 *
 	 * @param string $path
 	 * @param int $time
-	 * @return bool
 	 */
-	public function hasUpdated($path, $time) {
+	public function hasUpdated($path, $time): bool {
 		if (!$path and $this->root === '/') {
 			// mtime doesn't work for shares, but giving the nature of the backend,
 			// doing a full update is still just fast enough
@@ -443,7 +427,7 @@ class SMB extends Common implements INotifyStorage {
 	/**
 	 * @param string $path
 	 * @param string $mode
-	 * @return resource|bool
+	 * @return resource|false
 	 */
 	public function fopen($path, $mode) {
 		$fullPath = $this->buildPath($path);
@@ -509,7 +493,7 @@ class SMB extends Common implements INotifyStorage {
 		}
 	}
 
-	public function rmdir($path) {
+	public function rmdir($path): bool {
 		if ($this->isRootDir($path)) {
 			return false;
 		}
@@ -536,7 +520,7 @@ class SMB extends Common implements INotifyStorage {
 		}
 	}
 
-	public function touch($path, $mtime = null) {
+	public function touch($path, $mtime = null): bool {
 		try {
 			if (!$this->file_exists($path)) {
 				$fh = $this->share->write($this->buildPath($path));
@@ -552,7 +536,7 @@ class SMB extends Common implements INotifyStorage {
 		}
 	}
 
-	public function getMetaData($path) {
+	public function getMetaData($path): ?array {
 		try {
 			$fileInfo = $this->getFileInfo($path);
 		} catch (\OCP\Files\NotFoundException $e) {
@@ -560,14 +544,11 @@ class SMB extends Common implements INotifyStorage {
 		} catch (ForbiddenException $e) {
 			return null;
 		}
-		if (!$fileInfo) {
-			return null;
-		}
 
 		return $this->getMetaDataFromFileInfo($fileInfo);
 	}
 
-	private function getMetaDataFromFileInfo(IFileInfo $fileInfo) {
+	private function getMetaDataFromFileInfo(IFileInfo $fileInfo): array {
 		$permissions = Constants::PERMISSION_READ + Constants::PERMISSION_SHARE;
 
 		if (
@@ -628,7 +609,7 @@ class SMB extends Common implements INotifyStorage {
 		}
 	}
 
-	public function filetype($path) {
+	public function filetype($path): string|false {
 		try {
 			return $this->getFileInfo($path)->isDirectory() ? 'dir' : 'file';
 		} catch (\OCP\Files\NotFoundException $e) {
@@ -638,7 +619,7 @@ class SMB extends Common implements INotifyStorage {
 		}
 	}
 
-	public function mkdir($path) {
+	public function mkdir($path): bool {
 		$path = $this->buildPath($path);
 		try {
 			$this->share->mkdir($path);
@@ -651,7 +632,7 @@ class SMB extends Common implements INotifyStorage {
 		}
 	}
 
-	public function file_exists($path) {
+	public function file_exists($path): bool {
 		try {
 			// Case sensitive filesystem doesn't matter for root directory
 			if ($this->caseSensitive === false && $path !== '') {
@@ -675,7 +656,7 @@ class SMB extends Common implements INotifyStorage {
 		}
 	}
 
-	public function isReadable($path) {
+	public function isReadable($path): bool {
 		try {
 			$info = $this->getFileInfo($path);
 			return $this->showHidden || !$info->isHidden();
@@ -686,7 +667,7 @@ class SMB extends Common implements INotifyStorage {
 		}
 	}
 
-	public function isUpdatable($path) {
+	public function isUpdatable($path): bool {
 		try {
 			$info = $this->getFileInfo($path);
 			// following windows behaviour for read-only folders: they can be written into
@@ -699,7 +680,7 @@ class SMB extends Common implements INotifyStorage {
 		}
 	}
 
-	public function isDeletable($path) {
+	public function isDeletable($path): bool {
 		try {
 			$info = $this->getFileInfo($path);
 			return ($this->showHidden || !$info->isHidden()) && !$info->isReadOnly();
@@ -713,19 +694,14 @@ class SMB extends Common implements INotifyStorage {
 	/**
 	 * check if smbclient is installed
 	 */
-	public static function checkDependencies() {
+	public static function checkDependencies(): array|bool {
 		return (
 			(bool)\OC_Helper::findBinaryPath('smbclient')
 			|| NativeServer::available(new System())
 		) ? true : ['smbclient'];
 	}
 
-	/**
-	 * Test a storage for availability
-	 *
-	 * @return bool
-	 */
-	public function test() {
+	public function test(): bool {
 		try {
 			return parent::test();
 		} catch (StorageAuthException $e) {
@@ -738,7 +714,7 @@ class SMB extends Common implements INotifyStorage {
 		}
 	}
 
-	public function listen($path, callable $callback) {
+	public function listen($path, callable $callback): void {
 		$this->notify($path)->listen(function (IChange $change) use ($callback) {
 			if ($change instanceof IRenameChange) {
 				return $callback($change->getType(), $change->getPath(), $change->getTargetPath());
@@ -748,7 +724,7 @@ class SMB extends Common implements INotifyStorage {
 		});
 	}
 
-	public function notify($path) {
+	public function notify($path): SMBNotifyHandler {
 		$path = '/' . ltrim($path, '/');
 		$shareNotifyHandler = $this->share->notify($this->buildPath($path));
 		return new SMBNotifyHandler($shareNotifyHandler, $this->root);
