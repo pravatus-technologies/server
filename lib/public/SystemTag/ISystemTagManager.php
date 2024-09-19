@@ -112,7 +112,7 @@ interface ISystemTagManager {
 	 *
 	 * @since 9.1.0
 	 */
-	public function canUserAssignTag(ISystemTag $tag, IUser $user): bool;
+	public function canUserAssignTag(ISystemTag $tag, ?IUser $user): bool;
 
 	/**
 	 * Checks whether the given user is allowed to see the tag with the given id.
@@ -124,7 +124,7 @@ interface ISystemTagManager {
 	 *
 	 * @since 9.1.0
 	 */
-	public function canUserSeeTag(ISystemTag $tag, IUser $user): bool;
+	public function canUserSeeTag(ISystemTag $tag, ?IUser $user): bool;
 
 	/**
 	 * Set groups that can assign a given tag.

@@ -28,39 +28,19 @@ use Psr\Log\LoggerInterface;
 use Sabre\DAV\Auth\Plugin;
 
 class ServerFactory {
-	private IConfig $config;
-	private LoggerInterface $logger;
-	private IDBConnection $databaseConnection;
-	private IUserSession $userSession;
-	private IMountManager $mountManager;
-	private ITagManager $tagManager;
-	private IRequest $request;
-	private IPreview $previewManager;
-	private IEventDispatcher $eventDispatcher;
-	private IL10N $l10n;
 
 	public function __construct(
-		IConfig $config,
-		LoggerInterface $logger,
-		IDBConnection $databaseConnection,
-		IUserSession $userSession,
-		IMountManager $mountManager,
-		ITagManager $tagManager,
-		IRequest $request,
-		IPreview $previewManager,
-		IEventDispatcher $eventDispatcher,
-		IL10N $l10n,
+		private IConfig $config,
+		private LoggerInterface $logger,
+		private IDBConnection $databaseConnection,
+		private IUserSession $userSession,
+		private IMountManager $mountManager,
+		private ITagManager $tagManager,
+		private IRequest $request,
+		private IPreview $previewManager,
+		private IEventDispatcher $eventDispatcher,
+		private IL10N $l10n,
 	) {
-		$this->config = $config;
-		$this->logger = $logger;
-		$this->databaseConnection = $databaseConnection;
-		$this->userSession = $userSession;
-		$this->mountManager = $mountManager;
-		$this->tagManager = $tagManager;
-		$this->request = $request;
-		$this->previewManager = $previewManager;
-		$this->eventDispatcher = $eventDispatcher;
-		$this->l10n = $l10n;
 	}
 
 	/**

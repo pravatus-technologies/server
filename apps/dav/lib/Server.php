@@ -197,7 +197,7 @@ class Server {
 		}
 
 		// system tags plugins
-		$this->server->addPlugin(\OC::$server->get(SystemTagPlugin::class));
+		// $this->server->addPlugin(\OCP\Server::get(SystemTagPlugin::class));
 
 		// comments plugin
 		$this->server->addPlugin(new CommentsPlugin(
