@@ -1140,7 +1140,7 @@ class Manager implements IManager {
 			$added = 0;
 			foreach ($shares as $share) {
 				try {
-					$this->checkShare($share);
+					$this->checkShare($share, true);
 				} catch (ShareNotFound $e) {
 					// Ignore since this basically means the share is deleted
 					continue;
@@ -1225,6 +1225,17 @@ class Manager implements IManager {
 		});
 
 		return $shares;
+	}
+
+	/**
+	 * @inheritdoc
+	 */
+	public function getExpiredShares($userId, $shareType, ?string $path = null, $limit = 50, $offset = 0) {
+		$shares = $this->getSharesBy($userId, $shareType, $path, false, $limit, $offset);
+		
+		return array_filter($shares, function (IShare $share) {
+			return $share->isExpired();
+		});
 	}
 
 	/**
@@ -1347,11 +1358,14 @@ class Manager implements IManager {
 	 *
 	 * @throws ShareNotFound
 	 */
-	protected function checkShare(IShare $share): void {
-		if ($share->isExpired()) {
-			$this->deleteShare($share);
-			throw new ShareNotFound($this->l->t('The requested share does not exist anymore'));
+	protected function checkShare(IShare $share, $allowExpired = false): void {
+		if ($share->isExpired() && !$allowExpired) {
+			if ($this->config->getAppValue('core', 'shareapi_delete_on_expire', 'yes') === 'yes') {
+				$this->deleteShare($share);
+			}
+			throw new ShareNotFound($this->l->t('The requested share has expired'));
 		}
+
 		if ($this->config->getAppValue('files_sharing', 'hide_disabled_user_shares', 'no') === 'yes') {
 			$uids = array_unique([$share->getShareOwner(),$share->getSharedBy()]);
 			foreach ($uids as $uid) {
