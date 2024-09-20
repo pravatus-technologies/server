@@ -42,7 +42,7 @@ class ExpireSharesJob extends TimedJob {
 	 * @param array $argument unused argument
 	 */
 	public function run($argument) {
-		if ($this->config->getValueString('core', 'shareapi_delete_on_expire', 'yes') !== 'yes') {
+		if ($this->config->getValueString('core', 'shareapi_delete_on_expire', 'yes') === 'no') {
 			$this->logger->info('Share deletion on expiration is disabled');
 			return;
 		}

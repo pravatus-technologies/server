@@ -166,13 +166,13 @@ interface IManager {
 	 *
 	 * @param string $userId
 	 * @param int $shareType
-	 * @param string|null $path
+	 * @param Node|null $path
 	 * @param int $limit The maximum number of shares returned, -1 for all
 	 * @param int $offset
 	 * @return IShare[]
 	 * @since 31.0.0
 	 */
-	public function getExpiredShares($userId, $shareType, ?string $path = null, $limit = 50, $offset = 0);
+	public function getExpiredShares($userId, $shareType, ?Node $path = null, $limit = 50, $offset = 0);
 
 	/**
 	 * Retrieve a share by the share id.
