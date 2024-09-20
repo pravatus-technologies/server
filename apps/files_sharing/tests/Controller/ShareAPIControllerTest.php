@@ -103,7 +103,6 @@ class ShareAPIControllerTest extends TestCase {
 		$this->mailer = $this->createMock(IMailer::class);
 
 		$this->ocs = new ShareAPIController(
-			$this->appName,
 			$this->request,
 			$this->shareManager,
 			$this->groupManager,
